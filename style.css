@@ -215,3 +215,16 @@ button:not(.nav-link):hover { transform: translateY(-2px); box-shadow: 0 6px 20p
     .library-nav { bottom: 60px; max-width: 90vw; }
     .poem-interactions { flex-direction: column; align-items: center; }
 }
+.fullscreen-vault.active {
+    position: fixed; /* absolute ki jagah fixed jo poori window ko cover kare */
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-height: 100vh;
+    z-index: 500; /* Baki pages ke upar layer banane ke liye */
+    background: #050507; /* Background safe zone */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
