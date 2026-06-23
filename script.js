@@ -504,39 +504,42 @@
 
     function initLibraryFeatures() {
         const footerQuote = document.getElementById("quote-rotator"); if(footerQuote) footerQuote.innerText = quoteDatabase[Math.floor(Math.random() * quoteDatabase.length)];
-        const moonTrigger = document.getElementById("moon-phase");
-        if(moonTrigger) {
-            moonTrigger.addEventListener("click", () => {
-                globalState.secretClicks++; checkUltimateVault();
-                if(globalState.secretClicks === 3) { 
-                    globalState.hasTappedMoon = true; checkUltimateVault();
-                    showToast("🏆 Achievement Unlocked: Moonwalker");
-                    document.querySelector(".trigger-nav[data-target='page-secret']")?.click() || document.getElementById('page-secret').classList.add('active'); globalState.secretClicks = 0;
-                }
-            });
+        // --- IS CODE KO APNI SCRIPT.JS MEIN BADLEIN ---
+const moonTrigger = document.getElementById("moon-phase");
+if(moonTrigger) {
+    moonTrigger.addEventListener("click", () => {
+        globalState.secretClicks++; checkUltimateVault();
+        if(globalState.secretClicks === 3) { 
+            globalState.hasTappedMoon = true; checkUltimateVault();
+            showToast("🏆 Achievement Unlocked: Moonwalker");
+            
+            // Purane page ko smooth tareeqe se hatakar full screen par vault kholne ke liye:
+            const currentActivePage = document.querySelector(".page.active");
+            const vaultPage = document.getElementById('page-secret');
+            
+            if (currentActivePage && currentActivePage !== vaultPage) {
+                currentActivePage.classList.remove("active");
+                currentActivePage.classList.add("vortex-out");
+                
+                setTimeout(() => {
+                    currentActivePage.classList.remove("vortex-out");
+                    vaultPage.classList.add("vortex-in", "active");
+                    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+                    
+                    setTimeout(() => {
+                        vaultPage.classList.remove("vortex-in");
+                        bindWaxSeals(vaultPage);
+                    }, 50);
+                }, 600);
+            } else {
+                vaultPage.classList.add("active");
+            }
+            
+            globalState.secretClicks = 0;
         }
-        
-        document.body.addEventListener('click', function(e) {
-            // Bookmark Feature
-            if(e.target && e.target.classList.contains('bookmark-btn')) {
-                const poemId = e.target.getAttribute('data-poem'); let bookmarks = JSON.parse(localStorage.getItem('midnightBookmarks') || '[]');
-                if (!bookmarks.includes(poemId)) { bookmarks.push(poemId); localStorage.setItem('midnightBookmarks', JSON.stringify(bookmarks)); showToast("🔖 Verse saved to your soul."); } else { showToast("✨ Verse already remembered."); }
-                e.target.innerText = "❤️ Saved";
-            }
+    });
+}
 
-            // Favourites Feature (Resonated With Me)
-            if(e.target && e.target.classList.contains('resonate-btn')) {
-                const poemTitle = e.target.getAttribute('data-poem'); let favs = JSON.parse(localStorage.getItem('midnightFavs') || '[]');
-                if (!favs.includes(poemTitle)) { 
-                    favs.push(poemTitle); localStorage.setItem('midnightFavs', JSON.stringify(favs)); 
-                    showToast("❤️ Added to your Favourites."); 
-                    e.target.classList.add('active-fav');
-                } else { 
-                    showToast("✨ Already in your Favourites."); 
-                }
-            }
-        });
-    }
 
     function showToast(msg) {
         const container = document.getElementById("toast-container"); const toast = document.createElement("div"); toast.className = "toast"; toast.innerText = msg; container.appendChild(toast); setTimeout(() => toast.remove(), 3500);
