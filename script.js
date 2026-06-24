@@ -558,4 +558,97 @@ document.addEventListener("DOMContentLoaded", () => {
         container.appendChild(toast); 
         setTimeout(() => toast.remove(), 3500);
     }
+ // =====================================================================
+// THE MIDNIGHT LIBRARY - REPAIR UTILITY FOR SOOHAM JADHAO'S PROJECTS
+// =====================================================================
+
+// Local arrays setup
+let midnightFavs = JSON.parse(localStorage.getItem("library_favourites")) || [];
+let midnightBooks = JSON.parse(localStorage.getItem("library_bookmarks")) || [];
+
+// 1. GLOBAL FAVORITES (RESONATED WITH ME) CLICK HANDLER
+document.addEventListener("click", function(e) {
+    // Apne button classes ya text ke mutabiq match karna
+    if (e.target && (e.target.classList.contains("dynamic-fav-trigger") || e.target.innerText.includes("RESONATED WITH ME"))) {
+        
+        // Aapke active slide/chapter ka naam nikalne ke liye
+        let currentChapterTitle = "ANCHOR";
+        const headingElement = document.querySelector(".page.active .page1-heading, .page.active h1, .page.active h2");
+        if (headingElement) {
+            currentChapterTitle = headingElement.innerText.trim();
+        }
+
+        if (!midnightFavs.some(item => item.title === currentChapterTitle)) {
+            midnightFavs.push({ id: Date.now().toString(), title: currentChapterTitle });
+            localStorage.setItem("library_favourites", JSON.stringify(midnightFavs));
+            alert("❤️ Added to My Favourites: " + currentChapterTitle);
+            syncMidnightDrawers();
+        } else {
+            alert("✨ This verse already resonates in your soul.");
+        }
+    }
+
+    // 2. GLOBAL ARCHIVE (BOOKMARK) CLICK HANDLER
+    if (e.target && (e.target.classList.contains("dynamic-bookmark-trigger") || e.target.id === "bookmark-btn" || e.target.innerText.includes("Bookmark"))) {
+        
+        let currentChapterTitle = "ANCHOR";
+        const headingElement = document.querySelector(".page.active .page1-heading, .page.active h1, .page.active h2");
+        if (headingElement) {
+            currentChapterTitle = headingElement.innerText.trim();
+        }
+
+        if (!midnightBooks.some(item => item.title === currentChapterTitle)) {
+            midnightBooks.push({ id: Date.now().toString(), title: currentChapterTitle });
+            localStorage.setItem("library_bookmarks", JSON.stringify(midnightBooks));
+            alert("🔖 Verse archived in Saved Echoes: " + currentChapterTitle);
+            syncMidnightDrawers();
+        } else {
+            alert("📜 This echo is already safely locked inside the Archives.");
+        }
+    }
+
+    // 3. LISTEN: SOON AUDIO SYNCHRONIZER
+    if (e.target && e.target.innerText.includes("LISTEN: SOON")) {
+        alert("🔮 Whispering the fragments of silence...");
+        
+        // Pura text uthane ke liye jo active page par ho
+        const activePoemText = document.querySelector(".page.active .royal-poem-text, .page.active .poem-playfair");
+        let textToSpeak = "Welcome back to the Midnight Library.";
+        if (activePoemText) {
+            textToSpeak = activePoemText.innerText;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = 'en-US';
+        utterance.pitch = 0.85; // Soft deep tone
+        utterance.rate = 0.8;  // Medium slow speed
+        window.speechSynthesis.speak(utterance);
+    }
+});
+
+// DRAWER UI RE-RENDER SYNCHRONIZER
+function syncMidnightDrawers() {
+    const favList = document.getElementById("favourites-list");
+    const bookmarkList = document.getElementById("bookmarks-list");
+
+    if (favList && midnightFavs.length > 0) {
+        favList.innerHTML = midnightFavs.map(item => `
+            <div class="drawer-item" style="padding: 15px; border-bottom: 1px dashed rgba(191,164,111,0.2); color: #bfa46f; font-family: 'Cinzel', serif;">
+                ❤️ ${item.title}
+            </div>
+        `).join('');
+    }
+
+    if (bookmarkList && midnightBooks.length > 0) {
+        bookmarkList.innerHTML = midnightBooks.map(item => `
+            <div class="drawer-item" style="padding: 15px; border-bottom: 1px dashed rgba(191,164,111,0.2); color: #bfa46f; font-family: 'Cinzel', serif;">
+                📖 ${item.title}
+            </div>
+        `).join('');
+    }
+}
+
+// Initial script execution sync
+setTimeout(syncMidnightDrawers, 1000);
+  
 });
