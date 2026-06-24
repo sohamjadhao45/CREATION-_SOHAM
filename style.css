@@ -242,10 +242,11 @@ button:not(.nav-link):hover { transform: translateY(-2px); box-shadow: 0 6px 20p
 
 /* 2. Keeping the navigation strip clear and accessible on all screens */
 .library-footer, .library-nav, .navigation-strip-selector {
-  position: relative;
+  position: fixed !important;  /*  Ab yeh strip niche chipki rahegi aur float karegi */
   z-index: 99999 !important;
   pointer-events: auto !important;
 }
+
 
 /* 3. Safe scroll padding only for the specific secret vault room */
 .fullscreen-vault, #page-secret {
