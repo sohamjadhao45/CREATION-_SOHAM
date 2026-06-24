@@ -228,46 +228,54 @@ button:not(.nav-link):hover { transform: translateY(-2px); box-shadow: 0 6px 20p
     align-items: center;
     justify-content: center;
 }
-/* Mobile Viewport and Layer Fixes by Soham Madan Jadhao */
-header.library-header, footer.library-footer {
-  position: relative;
-  z-index: 10000 !important; /* Header-footer ko hamesha upar rakhega */
-}
+/* =====================================================================
+   RESTORE ORIGINAL STRUCTURAL SYSTEM — SOHAM JADHAO DESIGN SANCTUARY
+   ===================================================================== */
 
-main.content {
-  position: relative;
-  z-index: 100 !important;
-}
-
+/* 1. Resetting page heights to stop the folding behavior */
 .page {
-  max-height: 80vh !important;
-  overflow-y: auto !important; /* Mystery vault aur saare rooms ka scroll unblock */
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 60px !important;
+  max-height: none !important;
+  height: auto !important;
+  overflow-y: visible !important;
+  padding-bottom: 120px !important; /* Provides clear breathing space above the bottom navigation strip */
 }
 
-/* Custom Action Buttons Styling for Notes Room */
+/* 2. Keeping the navigation strip clear and accessible on all screens */
+.library-footer, .library-nav, .navigation-strip-selector {
+  position: relative;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+}
+
+/* 3. Safe scroll padding only for the specific secret vault room */
+.fullscreen-vault, #page-secret {
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 4. Formatting for utility interactions without breaking core container elements */
 .fragment-actions-row {
-  margin-top: 20px;
+  margin: 25px 0;
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
 .btn-utility {
-  background: rgba(191, 164, 111, 0.1);
-  border: 1px solid var(--gold, #bfa46f);
-  color: var(--gold, #bfa46f);
-  padding: 8px 15px;
+  background: rgba(191, 164, 111, 0.05);
+  border: 1px solid #bfa46f;
+  color: #bfa46f;
+  padding: 10px 18px;
   font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 1px;
   cursor: pointer;
-  transition: all 0.3s ease;
   border-radius: 4px;
+  transition: background 0.3s ease;
 }
 
 .btn-utility:hover {
-  background: var(--gold, #bfa46f);
-  color: #000;
-  box-shadow: 0 0 10px rgba(191,164,111,0.5);
+  background: rgba(191, 164, 111, 0.2);
 }
