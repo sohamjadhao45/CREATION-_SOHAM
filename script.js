@@ -24,18 +24,36 @@
         setupDynamicScrolls();
     });
 
-    // Handle Landing Gate Entry
-    const openGatesBtn = document.getElementById('open-gates-btn') || document.querySelector('.btn-solid');
+        // Handle Landing Gate Entry (Fixed & Guaranteed Transition)
+    const openGatesBtn = document.getElementById('open-gates-btn') || document.querySelector('.btn-solid') || document.querySelector('button[onclick*="gates"]');
     if (openGatesBtn) {
-        openGatesBtn.addEventListener('click', (e) => {
+        // Enforce pointer-events on initialization
+        openGatesBtn.style.pointerEvents = "auto";
+        
+        openGatesBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
+            
+            // Remove the entrance lock to instantly display headers/footers/nav bars
             document.body.classList.remove('on-entrance');
             
-            // Auto transition to first functional page if hidden
+            // Hide the intro landing screen element cleanly if it exists
+            const introScreen = document.getElementById('intro-screen') || document.getElementById('landing-screen');
+            if (introScreen) {
+                introScreen.classList.add('fade-out');
+            }
+            
+            // Forcefully look for the first content page to render it active
             const firstChapter = document.getElementById('page-ch1') || document.querySelector('.page');
             if (firstChapter) {
                 switchPage(firstChapter.id);
+            } else {
+                // Fallback: If IDs are unique, find the first available page component
+                const fallbackPage = document.querySelector('.page');
+                if (fallbackPage) fallbackPage.classList.add('active');
             }
+            
+            if (typeof showToast === "function") showToast("✨ Welcome to the Sanctuary.");
         });
     }
 
