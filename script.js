@@ -1,36 +1,33 @@
 /* ==========================================================================
-   THE MIDNIGHT LIBRARY - CENTRAL OPERATING ENGINE (ULTIMATE REPAIR BUILD)
+   THE MIDNIGHT LIBRARY - CENTRAL OPERATING ENGINE (COMPLETE UNABRIDGED BUILD)
    ========================================================================== */
 
 (function() {
-    // ---- 1. CORE POEMS & FRAGMENTS DATA ARCHIVE ----
+    // ---- 1. COMPLETE POEMS & CHAPTERS RAW DATA ARCHIVE ----
     const POEMS_DATABASE = {
         "page1": {
             title: "CREATION",
             subtitle: "The Genesis",
             date: "June 2026",
-            text: "Time moves softly, like a river carrying memories downstream.\n\nAlong its banks, Soham leaves behind his self-composed verses—each poem a footprint of a feeling, each stanza a witness to a fleeting moment.\n\nThis space shall grow with time itself, gathering words the way the night gathers stars."
+            text: "Time moves softly, like a river carrying memories downstream.\n\nAlong its banks, Soham leaves behind his self-composed verses—each poem a footprint of a feeling, each stanza a witness to a fleeting moment.\n\nThis space shall grow with time itself, gathering words the way the night gathers stars. Every click uncovers an emotion, every chapter unfolds a piece of life left unsaid."
         },
         "chapter-1": {
-            id: "chapter-1",
-            title: "Whispers of Wind",
-            subtitle: "Chapter I — Silent Echoes",
-            date: "Autumn 2025",
-            text: "The leaves change color, whispering secrets to the cold wind.\nWe walk down paths built from choices we never meant to make.\nEvery shadow holds a memory, every breeze a forgotten name.\nIn the rustle of the night, we find what remains unsaid."
+            title: "ANCHOR",
+            subtitle: "A Tribute To My Father",
+            date: "June 2026",
+            text: "You're my truth, my life,\nThe steady ground beneath my stride.\nIn every storm, you are the guide,\nAn anchor standing by my side.\n\nThrough winters cold and summers bright,\nYou held my hand and gave me light.\nNo words can paint the debt I owe,\nYou are the strongest force I know.\n\nWhen shadows fall and doubts creep in,\nYour silent faith helps me to win.\nMore than a guide, more than a friend,\nYour love is an anchor till the end."
         },
         "chapter-2": {
-            id: "chapter-2",
-            title: "Echoes of the Night",
-            subtitle: "Chapter II — Lunar Shadows",
-            date: "Midnight 2025",
-            text: "The moon sits high, a silver watchman over our deepest fears.\nWe try to write down words that only the darkness understands.\nStars burn out, leaving trails of dust across an empty canvas.\nYet, in this absolute silence, the soul speaks loudest."
+            title: "SPORTSMAN SPIRIT",
+            subtitle: "The Spirit of Excellence",
+            date: "June 2026",
+            text: "Ignite your fire.\nLearn from every downfall,\nDon't fear the pavilion's call.\nNever get upset,\nFace every yorker,\nBuild your own present.\n\nThe stadium roars, the lights shine bright,\nBut real champions thrive in the night.\nIt's not about the medals you hold,\nIt's the spirit within, fierce and bold.\n\nSo run the extra mile today,\nLet dedication clear the way.\nWin or lose, you stand up tall,\nFor the sportsman spirit conquers all."
         },
-        "chapter-3": {
-            id: "chapter-3",
-            title: "Stardust & Shadows",
-            subtitle: "Chapter III — Cosmic Dreams",
-            date: "Winter 2025",
-            text: "We are all made of old stardust, looking for a way back home.\nTrapped inside moments that fade before we can even blink.\nHolding onto pieces of dreams that dissolve into the morning air.\nBut shadows protect the light, and dust still learns to shine."
+        "page-fragments": {
+            title: "SILENT FRAGMENTS",
+            subtitle: "Notes From The Shadows",
+            date: "Midnight Chronicles",
+            text: "These are random ink spills from nights when sleep refused to visit.\n\nLoose thoughts scribbled on napkin edges and digital margins. Read them like scattered autumn leaves—each unique, dry, but full of the tree's lifetime memories."
         }
     };
 
@@ -38,30 +35,31 @@
         "Some stars burn so bright that their light reaches us long after they are dead. People are like that too.",
         "The universe doesn't speak in words; it speaks in silence, timing, and sudden realizations.",
         "We spend our whole lives building walls, only to look for someone crazy enough to climb them.",
-        "Perhaps the moon is lonely too, which is why it pulls the entire ocean just to feel close to something."
+        "Perhaps the moon is lonely too, which is why it pulls the entire ocean just to feel close to something.",
+        "Ink lasts longer than the hand that writes it, and whispers stay longer than the voice that spoke them."
     ];
 
-    // ---- 2. CORE STATES & GLOBAL ENGINE VARIABLES ----
+    // ---- 2. GLOBAL ENGINE VARIABLES ----
     let currentSpeech = null;
     let rainInterval = null;
     let favourites = JSON.parse(localStorage.getItem('favourites')) || [];
     let archives = JSON.parse(localStorage.getItem('archives')) || [];
 
-    // ---- 3. APPLICATION INITIALIZATION & ENTRANCE CONTROL ----
+    // ---- 3. CORE APPLICATION INITIALIZATION ----
     document.addEventListener("DOMContentLoaded", () => {
-        // Enforce clean layout state on first load
+        // Enforce entry overlay lock state on load
         document.body.classList.add('on-entrance');
 
-        // Render initially saved items into panels
+        // Render panels and states smoothly
         updateFavouritesUI();
         updateArchivesUI();
         initReadingProgress();
         initTouchRipple();
-        setupDynamicScrolls();
-        buildBookshelf(); // Dynamically draw the books with data!
+        buildNavigationMenu();
+        initWaxSealEngine();
 
-        // ---- GUARANTEED ENTER GATES TRIGGER ----
-        const enterLibraryBtn = document.getElementById('enter-library-btn');
+        // ---- "OPEN THE GATES" GATES CLICK EVENT ----
+        const enterLibraryBtn = document.getElementById('enter-library-btn') || document.querySelector('.btn-solid');
         if (enterLibraryBtn) {
             enterLibraryBtn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -79,8 +77,8 @@
                     }, 1200);
                 }
                 
-                // Force load the first layout page
-                switchPage('page1');
+                // Load default screen view cleanly
+                window.switchPage('page1');
                 
                 if (typeof window.showToast === "function") {
                     window.showToast("✨ Welcome to the Sanctuary.");
@@ -88,165 +86,116 @@
             });
         }
 
-        // Setup Midnight Thought Generator
+        // Setup Midnight Thought Generator Control
         const thoughtBtn = document.getElementById('reveal-thought-btn');
         if (thoughtBtn) {
             thoughtBtn.addEventListener('click', () => {
                 const randomThought = MIDNIGHT_THOUGHTS[Math.floor(Math.random() * MIDNIGHT_THOUGHTS.length)];
                 const display = document.getElementById('midnight-thought-display');
                 if (display) {
-                    display.style.opacity = 0;
+                    display.style.opacity = '0';
                     setTimeout(() => {
                         display.innerText = `"${randomThought}"`;
-                        display.style.opacity = 0.8;
-                    }, 200);
+                        display.style.opacity = '0.8';
+                    }, 300);
                 }
             });
         }
+
+        // Setup Event Listeners for Ambient Systems
+        setupAmbientListeners();
     });
 
-    // Smooth Web-Wheel to Horizontal Translation for Navigation Strip
-    function setupDynamicScrolls() {
-        const navStrip = document.querySelector('.library-nav');
-        if (navStrip) {
-            navStrip.addEventListener('wheel', (evt) => {
-                evt.preventDefault();
-                navStrip.scrollLeft += evt.deltaY;
-            }, { passive: true });
-        }
-    }
-
-    // Dynamic Bookshelf Builder from DB Data
-    function buildBookshelf() {
-        const shelf = document.getElementById('dynamic-bookshelf');
+    // Dynamic Navigation Renderer
+    function buildNavigationMenu() {
         const nav = document.getElementById('library-nav');
-        if (!shelf || !nav) return;
+        if (!nav) return;
 
-        // Reset elements
-        shelf.innerHTML = '';
-        
-        // Static Nav Menu Setup
         const navigationPages = [
             { id: 'page1', label: '🏛️ Home' },
-            { id: 'page-fragments', label: '🕯️ Notes Room' },
-            { id: 'page-archive', label: '📜 Ancient Shelf' },
-            { id: 'page-about', label: '🖋️ Author\'s Chamber' },
-            { id: 'page-secret', label: '👁️ Vault' }
+            { id: 'chapter-1', label: '⚓ Chapter I' },
+            { id: 'chapter-2', label: '⚡ Chapter II' },
+            { id: 'page-fragments', label: '🕯️ Notes Room' }
         ];
         
         nav.innerHTML = navigationPages.map(p => `
-            <button class="nav-link ${p.id === 'page1' ? 'active-nav' : ''}" onclick="switchPage('${p.id}')">${p.label}</button>
+            <button class="nav-link ${p.id === 'page1' ? 'active-nav' : ''}" onclick="window.switchPage('${p.id}')">${p.label}</button>
         `).join('');
-
-        // Generate Interactive Books on the Shelf
-        Object.keys(POEMS_DATABASE).forEach((key, index) => {
-            if (key === 'page1') return; // Skip home page text on shelf
-            const poem = POEMS_DATABASE[key];
-            
-            const book = document.createElement('div');
-            book.className = `book-spine ${index % 2 === 0 ? 'spine-gold' : ''}`;
-            book.setAttribute('title', `Read: ${poem.title}`);
-            book.innerHTML = `<span class="spine-text">${poem.title}</span>`;
-            
-            book.addEventListener('click', () => {
-                // Instantly inject clicked poem into our layout content boxes dynamically
-                injectPoemToDisplay(poem);
-                window.showToast(`📖 Opened: ${poem.title}`);
-            });
-            
-            shelf.appendChild(book);
-        });
     }
 
-    function injectPoemToDisplay(poem) {
-        // Find main page text spots to cleanly place clicked book text
-        const mainPoemBox = document.querySelector('#page1 .royal-poem-text');
-        const mainHeading = document.querySelector('#page1 .page1-heading');
-        const mainTagline = document.getElementById('tagline');
-        
-        if (mainPoemBox && mainHeading) {
-            mainHeading.innerText = poem.title.toUpperCase();
-            if (mainTagline) mainTagline.innerText = `"${poem.subtitle}"`;
-            mainPoemBox.innerHTML = poem.text.replace(/\n/g, '<br>');
-            
-            // Switch view elegantly back to default viewer panel
-            switchPage('page1');
-        }
-    }
-
-    // ---- 4. PAGE NAVIGATION & VORTEX TRANSITION SYSTEM ----
+    // ---- 4. PAGE SWITCHING & TRANSITION LOGIC ----
     window.switchPage = function(targetPageId) {
         const activePage = document.querySelector('.page.active');
-        const targetPage = document.getElementById(targetPageId);
         
-        if (!targetPage || activePage === targetPage) return;
+        // Dynamic Injection into Core Royal Text Block on the fly
+        if (POEMS_DATABASE[targetPageId]) {
+            const data = POEMS_DATABASE[targetPageId];
+            const mainHeading = document.querySelector('.page1-heading') || document.querySelector('h1');
+            const mainTagline = document.getElementById('tagline') || document.querySelector('.intro-highlight');
+            const mainPoemBox = document.querySelector('.royal-poem-text');
+            const dateBox = document.querySelector('.poem-date');
 
-        // Stop voice engine automatically when changing active rooms
-        if (window.speechSynthesis && window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
+            // Reset TTS Voice engine on room change
+            if (window.speechSynthesis && window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+                const listenBtn = document.getElementById('listen-btn');
+                if (listenBtn) listenBtn.innerHTML = "🎙️ LISTEN TO THE VERSE";
+            }
+
+            if (mainHeading) mainHeading.innerText = data.title;
+            if (mainTagline) mainTagline.innerText = data.subtitle || "";
+            if (mainPoemBox) mainPoemBox.innerHTML = data.text.replace(/\n/g, '<br>');
+            if (dateBox && data.date) dateBox.innerText = data.date;
+            
+            // Sync navigation active pills layout
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if(link.getAttribute('onclick')?.includes(targetPageId)) {
+                    link.classList.add('active-nav');
+                } else {
+                    link.classList.remove('active-nav');
+                }
+            });
+            return;
         }
+
+        const targetPage = document.getElementById(targetPageId);
+        if (!targetPage || activePage === targetPage) return;
 
         if (activePage) {
             activePage.classList.add('vortex-out');
             setTimeout(() => {
                 activePage.classList.remove('active', 'vortex-out');
-                executePageIn(targetPage);
+                targetPage.classList.add('vortex-in', 'active');
+                targetPage.offsetHeight; 
+                targetPage.classList.remove('vortex-in');
             }, 400); 
         } else {
-            executePageIn(targetPage);
+            targetPage.classList.add('active');
         }
     };
 
-    function executePageIn(targetPage) {
-        targetPage.classList.add('vortex-in', 'active');
-        targetPage.offsetHeight; // Force Repaint
-        targetPage.classList.remove('vortex-in');
-        
-        // Sync bottom active nav bar tabs
-        document.querySelectorAll('.nav-link').forEach(link => {
-            if(link.getAttribute('onclick')?.includes(targetPage.id)) {
-                link.classList.add('active-nav');
-            } else {
-                link.classList.remove('active-nav');
-            }
-        });
-    }
-
-    // ---- 5. SIDEBAR DRAWERS MANAGEMENT & STORAGE SYSTEM ----
-    function getActiveVerseMetadata() {
-        const activePage = document.querySelector('.page.active');
-        if (!activePage) return null;
-        
-        const headingElement = activePage.querySelector('.page1-heading') || activePage.querySelector('h2');
-        return { 
-            id: activePage.id || "unspecified-fragment", 
-            title: headingElement ? headingElement.innerText.trim() : "An Untold Verse" 
-        };
-    }
-
+    // ---- 5. SIDEBAR MANAGEMENT & STORAGE SYSTEM ----
     function updateFavouritesUI() {
-        const favDrawer = document.querySelector('#favourites-list');
+        const favDrawer = document.querySelector('#favourites-list') || document.getElementById('favourites-drawer');
         if (!favDrawer) return;
-        favourites = JSON.parse(localStorage.getItem('favourites')) || [];
         if (favourites.length === 0) {
-            favDrawer.innerHTML = `<div class="bookmark-item" style="opacity:0.5; cursor:default;">No Favourites Whispered Yet.</div>`;
+            favDrawer.innerHTML = `<div class="bookmark-item" style="opacity:0.5; border:none;">No Favourites Whispered Yet.</div>`;
             return;
         }
         favDrawer.innerHTML = favourites.map(item => `
-            <div class="bookmark-item" onclick="switchPage('${item.id}'); closeAllDrawers();">❤️ ${item.title}</div>
+            <div class="bookmark-item" onclick="window.switchPage('${item.id}'); window.closeAllDrawers();">❤️ ${item.title}</div>
         `).join('');
     }
 
     function updateArchivesUI() {
-        const archiveDrawer = document.querySelector('#bookmarks-list');
+        const archiveDrawer = document.querySelector('#bookmarks-list') || document.getElementById('bookmarks-drawer');
         if (!archiveDrawer) return;
-        archives = JSON.parse(localStorage.getItem('archives')) || [];
         if (archives.length === 0) {
-            archiveDrawer.innerHTML = `<div class="bookmark-item" style="opacity:0.5; cursor:default;">No Archives Collected Yet.</div>`;
+            archiveDrawer.innerHTML = `<div class="bookmark-item" style="opacity:0.5; border:none;">No Archives Collected Yet.</div>`;
             return;
         }
         archiveDrawer.innerHTML = archives.map(item => `
-            <div class="bookmark-item" onclick="switchPage('${item.id}'); closeAllDrawers();">📜 ${item.title}</div>
+            <div class="bookmark-item" onclick="window.switchPage('${item.id}'); window.closeAllDrawers();">📜 ${item.title}</div>
         `).join('');
     }
 
@@ -266,13 +215,79 @@
         document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
     };
 
-    // Core Sidebar Event Wireups
-    document.getElementById('open-fav-btn')?.addEventListener('click', () => window.toggleDrawer('favourites-drawer'));
-    document.getElementById('open-bookmarks-btn')?.addEventListener('click', () => window.toggleDrawer('bookmarks-drawer'));
-    document.getElementById('close-drawer')?.addEventListener('click', window.closeAllDrawers);
-    document.getElementById('close-fav-drawer')?.addEventListener('click', window.closeAllDrawers);
+    // ---- 6. AUDIO HANDLERS & ENVIRONMENT UTILITIES ----
+    function setupAmbientListeners() {
+        // Voice TTS Engine Trigger Setup
+        const listenBtn = document.getElementById('listen-btn') || document.querySelector('.listen-btn');
+        if (listenBtn) {
+            listenBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                    this.innerHTML = "🎙️ LISTEN TO THE VERSE";
+                    return;
+                }
+                const mainPoemBox = document.querySelector('.royal-poem-text');
+                if (!mainPoemBox) return;
 
-    // ---- 6. IMMERSIVE ENVIRONMENT UTILITIES (RAIN, PROGRESS BAR, RIPPLES) ----
+                currentSpeech = new SpeechSynthesisUtterance(mainPoemBox.innerText);
+                currentSpeech.rate = 0.88;
+                currentSpeech.onstart = () => { listenBtn.innerHTML = "🛑 STOP LISTENING"; };
+                currentSpeech.onend = () => { listenBtn.innerHTML = "🎙️ LISTEN TO THE VERSE"; };
+                window.speechSynthesis.speak(currentSpeech);
+            });
+        }
+
+        // Toggle Rain Controller Setup
+        document.getElementById('rain-toggle')?.addEventListener('click', function() {
+            const canvas = document.getElementById('rain-canvas');
+            if (!canvas) return;
+            canvas.classList.toggle('raining');
+            const ctx = canvas.getContext('2d');
+            
+            if (canvas.classList.contains('raining')) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                let drops = Array(Math.floor(window.innerWidth / 8)).fill(0);
+                rainInterval = setInterval(() => {
+                    ctx.fillStyle = 'rgba(5, 5, 7, 0.15)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = 'rgba(191, 164, 111, 0.2)';
+                    ctx.font = '10px monospace';
+                    drops.forEach((y, x) => {
+                        ctx.fillText('|', x * 8, y);
+                        if (y > canvas.height && Math.random() > 0.98) drops[x] = 0;
+                        else drops[x] = y + 12;
+                    });
+                }, 33);
+                window.showToast("🌧️ Atmospheric rain activated.");
+            } else {
+                clearInterval(rainInterval);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        });
+
+        // Sidebar Header Actions Trigger Wiring
+        document.getElementById('open-fav-btn')?.addEventListener('click', () => window.toggleDrawer('favourites-drawer'));
+        document.getElementById('open-bookmarks-btn')?.addEventListener('click', () => window.toggleDrawer('bookmarks-drawer'));
+        document.querySelectorAll('.drawer-header button, #close-drawer, #close-fav-drawer').forEach(btn => {
+            btn.addEventListener('click', window.closeAllDrawers);
+        });
+    }
+
+    // ---- 7. WAX SEAL SECURE CRYPTO UNLOCKER ----
+    function initWaxSealEngine() {
+        const waxWrapper = document.querySelector('.wax-seal-wrapper');
+        const waxSeal = document.querySelector('.wax-seal');
+        if (waxSeal && waxWrapper) {
+            waxSeal.addEventListener('click', function(e) {
+                e.preventDefault();
+                waxWrapper.classList.add('broken');
+                window.showToast("👁️ Vault Seal Broken. Forbidden contents exposed.");
+            });
+        }
+    }
+
     function initReadingProgress() {
         window.addEventListener('scroll', () => {
             if (document.body.classList.contains('on-entrance')) return;
@@ -283,35 +298,6 @@
             bar.style.width = height > 0 ? `${(winScroll / height) * 100}%` : "0%";
         }, { passive: true });
     }
-
-    // Toggle Rain Controller
-    document.getElementById('rain-toggle')?.addEventListener('click', function() {
-        const canvas = document.getElementById('rain-canvas');
-        if (!canvas) return;
-        canvas.classList.toggle('raining');
-        const ctx = canvas.getContext('2d');
-        
-        if (canvas.classList.contains('raining')) {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            let drops = Array(Math.floor(window.innerWidth / 8)).fill(0);
-            rainInterval = setInterval(() => {
-                ctx.fillStyle = 'rgba(5, 5, 7, 0.15)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = 'rgba(191, 164, 111, 0.2)';
-                ctx.font = '10px monospace';
-                drops.forEach((y, x) => {
-                    ctx.fillText('|', x * 8, y);
-                    if (y > canvas.height && Math.random() > 0.98) drops[x] = 0;
-                    else drops[x] = y + 12;
-                });
-            }, 33);
-            window.showToast("🌧️ Atmospheric rain activated.");
-        } else {
-            clearInterval(rainInterval);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-    });
 
     function initTouchRipple() {
         window.addEventListener('click', (e) => {
@@ -333,11 +319,4 @@
         container.appendChild(t);
         setTimeout(() => t.remove(), 3400);
     };
-
-    // Live Clock Sync
-    const dateDisplay = document.getElementById('journal-date');
-    if (dateDisplay) {
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        dateDisplay.innerText = `Journal Entry: ${new Date().toLocaleDateString('en-US', options)}`;
-    }
 })();
