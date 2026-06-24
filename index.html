@@ -6,7 +6,7 @@
     <title>The Antique Poetry Chamber</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="custom-cursor">
 
     <div id="reading-progress"></div>
 
@@ -18,8 +18,9 @@
             <h1 class="intro-title">CHAMBER</h1>
             <div class="intro-line"></div>
             <div class="intro-prose">
-                <p>Welcome, wanderer of words. Enter the passport key to unlock the archives.</p>
-                <p class="intro-highlight">Speak "Open" or type the key below...</p>
+                <p>Welcome, wanderer of words. You have stumbled upon an ancient repository where verses breathe and shadows speak.</p>
+                <p>To cross this threshold and unlock the locked archives, you must present the secret passport phrase.</p>
+                <p class="intro-highlight">Enter the password or click Unlock below...</p>
             </div>
             <input type="text" id="secret-word" class="passport-input" placeholder="ENTER PASSPORT KEY...">
             <div class="button-row mt-20">
@@ -32,11 +33,11 @@
         <div class="header-left">
             <span class="journal-date">24 June 2026</span>
             <span class="header-divider">|</span>
-            <span>Chamber Archives</span>
+            <span>Chamber Archives v4.0</span>
         </div>
         <div class="header-right">
-            <span class="interactive-moon" id="theme-toggle">🌙</span>
-            <button class="btn-icon" id="open-drawer-btn">Bookmarks</button>
+            <span class="interactive-moon" id="theme-toggle" style="font-size: 16px;">🌙</span>
+            <button class="btn-icon" id="open-drawer-btn">📜 Bookmarks Ledger</button>
         </div>
     </header>
 
@@ -48,18 +49,32 @@
             <div class="heading-wrapper">
                 <h1 class="page1-heading moon-glow">The Library</h1>
             </div>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Select a tome from the shelf below to read the verses.</p>
+            <p style="color: var(--text-muted); margin-bottom: 30px; font-style: italic;">"A room without books is like a body without a soul." Select a tome to begin your journey.</p>
             
             <div class="bookshelf-container">
                 <div class="bookshelf-row">
                     <div class="book-spine spine-gold" data-target="page-poem-1">
                         <span class="spine-text">The Lost Moon</span>
                     </div>
+                    <div class="book-spine" data-target="page-poem-2" style="background: linear-gradient(90deg, #123242, #1d536b, #0d212b);">
+                        <span class="spine-text">Ocean Echoes</span>
+                    </div>
+                    <div class="book-spine" data-target="page-authors" style="background: linear-gradient(90deg, #1c4212, #2d6b1d, #11300a);">
+                        <span class="spine-text">Scribes Guild</span>
+                    </div>
                     <div class="book-spine" data-target="page-vault">
                         <span class="spine-text">🔒 Mystery Vault</span>
                     </div>
                 </div>
                 <div class="shelf-wood" style="--shelf-color: #3d2314;"></div>
+            </div>
+
+            <div class="heading-wrapper" style="margin-top: 50px;">
+                <h3 style="font-family: 'Cinzel', serif; color: var(--gold); letter-spacing: 2px;">Sign the Visitor Journal</h3>
+            </div>
+            <div class="visitor-journal">
+                <input type="text" id="journal-input" class="journal-input" placeholder="Leave your mark in history...">
+                <button id="journal-submit" class="journal-submit">✒️</button>
             </div>
         </div>
 
@@ -75,8 +90,10 @@
                     <span class="drop-cap-antique">T</span>
                     <span class="poem-playfair">he stars whispered secrets to the fading night,<br>
                     While the shadow of the moon took its lonely flight.<br>
-                    We seek the <span class="whisper-word" data-whisper="hidden truth">whispers</span> left untold,<br>
-                    In pages of silver, and bindings of gold.</span>
+                    We seek the <span class="whisper-word" data-whisper="You found the hidden truth!">whispers</span> left untold,<br>
+                    In pages of silver, and bindings of gold.<br>
+                    Time decays the stone, and rusts the heavy blade,<br>
+                    But the echoes of our love shall never truly fade.</span>
                     <span class="poem-greatvibes sign-animate">The Midnight Scribe</span>
                 </div>
                 
@@ -84,7 +101,58 @@
 
                 <div class="poem-interactions">
                     <button class="listen-btn">🔊 Listen Poem</button>
-                    <button class="resonate-btn" data-poem-id="poem-1">✦ Resonate</button>
+                    <button class="resonate-btn" data-poem-id="The Lost Moon">✦ Resonate</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="page-poem-2">
+            <div class="antique-parchment">
+                <div class="top-deco">⚓ ⚓ ⚓</div>
+                <div class="meta-strip">
+                    <span class="mood-tag">Serene</span>
+                    <span class="read-time">1.5 Min Read</span>
+                </div>
+                
+                <div class="royal-poem-text typewriter-poem">
+                    <span class="drop-cap-antique" style="color: #6b8cce;">O</span>
+                    <span class="poem-playfair">ver the crashing waves where the lost ships sail,<br>
+                    The tides tell a tragic, forgotten old tale.<br>
+                    A heart buried deep beneath the sapphire sea,<br>
+                    Waiting for the wind to finally set it <span class="whisper-word" data-whisper="Freedom is a state of mind.">free</span>.<br>
+                    Listen closely to the deep, eternal roar,<br>
+                    As old memories wash upon the silent shore.</span>
+                    <span class="poem-greatvibes sign-animate" style="color: #6b8cce;">The Ocean Wanderer</span>
+                </div>
+                
+                <div class="poem-date">Anno Domini 2026</div>
+
+                <div class="poem-interactions">
+                    <button class="listen-btn">🔊 Listen Poem</button>
+                    <button class="resonate-btn" data-poem-id="Ocean Echoes">✦ Resonate</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="page-authors">
+            <div class="heading-wrapper">
+                <h1 class="page1-heading">The Scribes Guild</h1>
+            </div>
+            <div class="author-grid">
+                <div class="antique-parchment">
+                    <div class="gothic-window"><div class="moon-visual"></div><div class="moonlight-beam"></div></div>
+                    <div class="avatar-placeholder">🪶</div>
+                    <h3 class="author-name">The Midnight Scribe</h3>
+                    <div class="chamber-stat"><strong>Domain:</strong> Cosmic Melancholy</div>
+                    <div class="chamber-stat"><strong>Verses:</strong> 42 Manuscripts</div>
+                    <p style="font-size: 14px; font-style: italic; margin-top: 10px;">"Capturing the silver glow of the moon before it disappears into the canvas of dawn."</p>
+                </div>
+                <div class="antique-parchment">
+                    <div class="avatar-placeholder">🌊</div>
+                    <h3 class="author-name">The Ocean Wanderer</h3>
+                    <div class="chamber-stat"><strong>Domain:</strong> Abyssal Depths</div>
+                    <div class="chamber-stat"><strong>Verses:</strong> 19 Chronicles</div>
+                    <p style="font-size: 14px; font-style: italic; margin-top: 10px;">"Writing chronicles on water, chasing waves that carry the weight of forgotten worlds."</p>
                 </div>
             </div>
         </div>
@@ -100,13 +168,13 @@
 
                 <div class="vault-content-inner">
                     <div class="top-deco">⚜ THE UNBROKEN VAULT ⚜</div>
-                    <h2 class="author-name">Forbidden Verses</h2>
-                    <div class="royal-poem-text">
-                        <p>You have broken the wax seal of antiquity.</p>
-                        <p style="font-style: italic; margin-top: 15px; color: var(--gold);">"Only the silent observer captures the echo of eternity."</p>
+                    <h2 class="author-name" style="font-size: 28px;">Forbidden Verses of Antiquity</h2>
+                    <div class="royal-poem-text" style="margin-top: 20px;">
+                        <p>You have successfully broken the seal of the high archives.</p>
+                        <p style="font-style: italic; margin-top: 15px; color: var(--gold);">"Only the silent observer captures the true echo of eternity. What is locked here shall remain inside your memory alone."</p>
                     </div>
                     <div class="button-row mt-20">
-                        <button class="btn-outline" id="close-vault-btn">Back to Library</button>
+                        <button class="btn-outline" id="close-vault-btn">Re-Lock & Return</button>
                     </div>
                 </div>
             </div>
@@ -116,7 +184,9 @@
 
     <nav class="library-nav">
         <button class="nav-link active-nav" data-target="page-home">Library</button>
-        <button class="nav-link" data-target="page-poem-1">Current Verse</button>
+        <button class="nav-link" data-target="page-poem-1">Verse I</button>
+        <button class="nav-link" data-target="page-poem-2">Verse II</button>
+        <button class="nav-link" data-target="page-authors">Guild</button>
         <button class="nav-link" data-target="page-vault">Vault</button>
     </nav>
 
@@ -126,8 +196,7 @@
             <button class="btn-icon" id="close-drawer-btn" style="margin:0;">✕</button>
         </div>
         <div class="drawer-content" id="ledger-list">
-            <p style="color: var(--text-muted); text-align:center; padding-top:20px;">No resonances saved yet.</p>
-        </div>
+            </div>
     </div>
 
     <div id="toast-container"></div>
