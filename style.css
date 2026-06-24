@@ -229,15 +229,20 @@ button:not(.nav-link):hover { transform: translateY(-2px); box-shadow: 0 6px 20p
     justify-content: center;
 }
 /* ==========================================================================
-   MAIN LAYOUT & VISIBILITY FIXES
+   MAIN LAYOUT & VISIBILITY FIXES (UPDATED)
    ========================================================================== */
 
-/* 1. FIRST PAGE CLEANUP: Hide elements when on entrance/landing screen */
+/* 1. FIRST PAGE CLEANUP: Hide top rows, nav, and footers entirely on entrance screen */
 body.on-entrance .top-buttons-container,
+body.on-entrance .library-header,
 body.on-entrance .library-nav,
-body.on-entrance .library-footer {
+body.on-entrance .library-footer,
+body.on-entrance button:not(.btn-solid) {
     display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
+
 
 /* 2. STICKY TOP MENU: Buttons stay on top no matter how much you scroll */
 .top-buttons-container {
