@@ -1,17 +1,53 @@
 /* ==========================================================================
-   THE MIDNIGHT LIBRARY - CENTRAL OPERATING ENGINE (REPAIR VERSION)
+   THE MIDNIGHT LIBRARY - CENTRAL OPERATING ENGINE (ULTIMATE REPAIR BUILD)
    ========================================================================== */
 
 (function() {
-    // ---- 1. CORE STATES & GLOBAL ENGINE VARIABLES ----
+    // ---- 1. CORE POEMS & FRAGMENTS DATA ARCHIVE ----
+    const POEMS_DATABASE = {
+        "page1": {
+            title: "CREATION",
+            subtitle: "The Genesis",
+            date: "June 2026",
+            text: "Time moves softly, like a river carrying memories downstream.\n\nAlong its banks, Soham leaves behind his self-composed verses—each poem a footprint of a feeling, each stanza a witness to a fleeting moment.\n\nThis space shall grow with time itself, gathering words the way the night gathers stars."
+        },
+        "chapter-1": {
+            id: "chapter-1",
+            title: "Whispers of Wind",
+            subtitle: "Chapter I — Silent Echoes",
+            date: "Autumn 2025",
+            text: "The leaves change color, whispering secrets to the cold wind.\nWe walk down paths built from choices we never meant to make.\nEvery shadow holds a memory, every breeze a forgotten name.\nIn the rustle of the night, we find what remains unsaid."
+        },
+        "chapter-2": {
+            id: "chapter-2",
+            title: "Echoes of the Night",
+            subtitle: "Chapter II — Lunar Shadows",
+            date: "Midnight 2025",
+            text: "The moon sits high, a silver watchman over our deepest fears.\nWe try to write down words that only the darkness understands.\nStars burn out, leaving trails of dust across an empty canvas.\nYet, in this absolute silence, the soul speaks loudest."
+        },
+        "chapter-3": {
+            id: "chapter-3",
+            title: "Stardust & Shadows",
+            subtitle: "Chapter III — Cosmic Dreams",
+            date: "Winter 2025",
+            text: "We are all made of old stardust, looking for a way back home.\nTrapped inside moments that fade before we can even blink.\nHolding onto pieces of dreams that dissolve into the morning air.\nBut shadows protect the light, and dust still learns to shine."
+        }
+    };
+
+    const MIDNIGHT_THOUGHTS = [
+        "Some stars burn so bright that their light reaches us long after they are dead. People are like that too.",
+        "The universe doesn't speak in words; it speaks in silence, timing, and sudden realizations.",
+        "We spend our whole lives building walls, only to look for someone crazy enough to climb them.",
+        "Perhaps the moon is lonely too, which is why it pulls the entire ocean just to feel close to something."
+    ];
+
+    // ---- 2. CORE STATES & GLOBAL ENGINE VARIABLES ----
     let currentSpeech = null;
     let rainInterval = null;
-
-    // LocalStorage Setup
     let favourites = JSON.parse(localStorage.getItem('favourites')) || [];
     let archives = JSON.parse(localStorage.getItem('archives')) || [];
 
-    // ---- 2. APPLICATION INITIALIZATION & ENTRANCE CONTROL ----
+    // ---- 3. APPLICATION INITIALIZATION & ENTRANCE CONTROL ----
     document.addEventListener("DOMContentLoaded", () => {
         // Enforce clean layout state on first load
         document.body.classList.add('on-entrance');
@@ -22,7 +58,7 @@
         initReadingProgress();
         initTouchRipple();
         setupDynamicScrolls();
-        generateNavLinks(); // Create nav links if not present dynamically
+        buildBookshelf(); // Dynamically draw the books with data!
 
         // ---- GUARANTEED ENTER GATES TRIGGER ----
         const enterLibraryBtn = document.getElementById('enter-library-btn');
@@ -51,6 +87,22 @@
                 }
             });
         }
+
+        // Setup Midnight Thought Generator
+        const thoughtBtn = document.getElementById('reveal-thought-btn');
+        if (thoughtBtn) {
+            thoughtBtn.addEventListener('click', () => {
+                const randomThought = MIDNIGHT_THOUGHTS[Math.floor(Math.random() * MIDNIGHT_THOUGHTS.length)];
+                const display = document.getElementById('midnight-thought-display');
+                if (display) {
+                    display.style.opacity = 0;
+                    setTimeout(() => {
+                        display.innerText = `"${randomThought}"`;
+                        display.style.opacity = 0.8;
+                    }, 200);
+                }
+            });
+        }
     });
 
     // Smooth Web-Wheel to Horizontal Translation for Navigation Strip
@@ -64,34 +116,74 @@
         }
     }
 
-    // Dynamic Navigation Pill Builder to align with HTML sections
-    function generateNavLinks() {
+    // Dynamic Bookshelf Builder from DB Data
+    function buildBookshelf() {
+        const shelf = document.getElementById('dynamic-bookshelf');
         const nav = document.getElementById('library-nav');
-        if (!nav) return;
-        const pages = [
+        if (!shelf || !nav) return;
+
+        // Reset elements
+        shelf.innerHTML = '';
+        
+        // Static Nav Menu Setup
+        const navigationPages = [
             { id: 'page1', label: '🏛️ Home' },
             { id: 'page-fragments', label: '🕯️ Notes Room' },
             { id: 'page-archive', label: '📜 Ancient Shelf' },
             { id: 'page-about', label: '🖋️ Author\'s Chamber' },
             { id: 'page-secret', label: '👁️ Vault' }
         ];
-        nav.innerHTML = pages.map(p => `
+        
+        nav.innerHTML = navigationPages.map(p => `
             <button class="nav-link ${p.id === 'page1' ? 'active-nav' : ''}" onclick="switchPage('${p.id}')">${p.label}</button>
         `).join('');
+
+        // Generate Interactive Books on the Shelf
+        Object.keys(POEMS_DATABASE).forEach((key, index) => {
+            if (key === 'page1') return; // Skip home page text on shelf
+            const poem = POEMS_DATABASE[key];
+            
+            const book = document.createElement('div');
+            book.className = `book-spine ${index % 2 === 0 ? 'spine-gold' : ''}`;
+            book.setAttribute('title', `Read: ${poem.title}`);
+            book.innerHTML = `<span class="spine-text">${poem.title}</span>`;
+            
+            book.addEventListener('click', () => {
+                // Instantly inject clicked poem into our layout content boxes dynamically
+                injectPoemToDisplay(poem);
+                window.showToast(`📖 Opened: ${poem.title}`);
+            });
+            
+            shelf.appendChild(book);
+        });
     }
 
-    // ---- 3. PAGE NAVIGATION & VORTEX TRANSITION SYSTEM ----
+    function injectPoemToDisplay(poem) {
+        // Find main page text spots to cleanly place clicked book text
+        const mainPoemBox = document.querySelector('#page1 .royal-poem-text');
+        const mainHeading = document.querySelector('#page1 .page1-heading');
+        const mainTagline = document.getElementById('tagline');
+        
+        if (mainPoemBox && mainHeading) {
+            mainHeading.innerText = poem.title.toUpperCase();
+            if (mainTagline) mainTagline.innerText = `"${poem.subtitle}"`;
+            mainPoemBox.innerHTML = poem.text.replace(/\n/g, '<br>');
+            
+            // Switch view elegantly back to default viewer panel
+            switchPage('page1');
+        }
+    }
+
+    // ---- 4. PAGE NAVIGATION & VORTEX TRANSITION SYSTEM ----
     window.switchPage = function(targetPageId) {
         const activePage = document.querySelector('.page.active');
         const targetPage = document.getElementById(targetPageId);
         
         if (!targetPage || activePage === targetPage) return;
 
-        // Stop voice engine automatically when changing active verses
+        // Stop voice engine automatically when changing active rooms
         if (window.speechSynthesis && window.speechSynthesis.speaking) {
             window.speechSynthesis.cancel();
-            const listenBtn = document.getElementById('listen-btn') || document.querySelector('.listen-btn');
-            if (listenBtn) listenBtn.innerHTML = "🎙️ LISTEN TO THE VERSE";
         }
 
         if (activePage) {
@@ -107,10 +199,10 @@
 
     function executePageIn(targetPage) {
         targetPage.classList.add('vortex-in', 'active');
-        targetPage.offsetHeight; // Force Layout Repaint
+        targetPage.offsetHeight; // Force Repaint
         targetPage.classList.remove('vortex-in');
         
-        // Sync nav links
+        // Sync bottom active nav bar tabs
         document.querySelectorAll('.nav-link').forEach(link => {
             if(link.getAttribute('onclick')?.includes(targetPage.id)) {
                 link.classList.add('active-nav');
@@ -120,47 +212,15 @@
         });
     }
 
-    // ---- 4. TEXT-TO-SPEECH AI VOICE ENGINE ----
-    const listenBtn = document.getElementById('listen-btn') || document.querySelector('.listen-btn');
-    if (listenBtn) {
-        listenBtn.innerHTML = "🎙️ LISTEN TO THE VERSE";
-        listenBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (window.speechSynthesis.speaking) {
-                window.speechSynthesis.cancel();
-                this.innerHTML = "🎙️ LISTEN TO THE VERSE";
-                return;
-            }
-            const activePage = document.querySelector('.page.active');
-            if (!activePage) return;
-
-            const targets = activePage.querySelectorAll('.royal-poem-text, .poem-playfair, p:not(.footer-sub)');
-            let proseCollection = "";
-            targets.forEach(el => { proseCollection += el.innerText + " "; });
-
-            if (!proseCollection.trim()) return;
-
-            currentSpeech = new SpeechSynthesisUtterance(proseCollection.trim());
-            const systemVoices = window.speechSynthesis.getVoices();
-            const preferredVoice = systemVoices.find(v => v.lang.includes('en-GB') || v.lang.includes('en-US'));
-            if (preferredVoice) currentSpeech.voice = preferredVoice;
-            
-            currentSpeech.rate = 0.85;
-            currentSpeech.onstart = () => { listenBtn.innerHTML = "🛑 STOP LISTENING"; };
-            currentSpeech.onend = () => { listenBtn.innerHTML = "🎙️ LISTEN TO THE VERSE"; };
-            currentSpeech.onerror = () => { listenBtn.innerHTML = "🎙️ LISTEN TO THE VERSE"; };
-
-            window.speechSynthesis.speak(currentSpeech);
-        });
-    }
-
-    // ---- 5. REPOSITORY ENGINE ----
+    // ---- 5. SIDEBAR DRAWERS MANAGEMENT & STORAGE SYSTEM ----
     function getActiveVerseMetadata() {
         const activePage = document.querySelector('.page.active');
         if (!activePage) return null;
+        
+        const headingElement = activePage.querySelector('.page1-heading') || activePage.querySelector('h2');
         return { 
             id: activePage.id || "unspecified-fragment", 
-            title: activePage.querySelector('.page1-heading')?.innerText.trim() || "An Untold Verse" 
+            title: headingElement ? headingElement.innerText.trim() : "An Untold Verse" 
         };
     }
 
@@ -190,7 +250,6 @@
         `).join('');
     }
 
-    // ---- 6. DRAWER INTERFACE MANAGEMENT ----
     window.toggleDrawer = function(drawerId) {
         const targetDrawer = document.getElementById(drawerId);
         if (!targetDrawer) return;
@@ -207,13 +266,13 @@
         document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
     };
 
-    // Attach native button clicks for explicit drawers setup via HTML
+    // Core Sidebar Event Wireups
     document.getElementById('open-fav-btn')?.addEventListener('click', () => window.toggleDrawer('favourites-drawer'));
     document.getElementById('open-bookmarks-btn')?.addEventListener('click', () => window.toggleDrawer('bookmarks-drawer'));
     document.getElementById('close-drawer')?.addEventListener('click', window.closeAllDrawers);
     document.getElementById('close-fav-drawer')?.addEventListener('click', window.closeAllDrawers);
 
-    // ---- 7. TIMELINE & AMBIENT EFFECTS ----
+    // ---- 6. IMMERSIVE ENVIRONMENT UTILITIES (RAIN, PROGRESS BAR, RIPPLES) ----
     function initReadingProgress() {
         window.addEventListener('scroll', () => {
             if (document.body.classList.contains('on-entrance')) return;
@@ -225,7 +284,7 @@
         }, { passive: true });
     }
 
-    // Toggle Rain System Wireup to HTML header
+    // Toggle Rain Controller
     document.getElementById('rain-toggle')?.addEventListener('click', function() {
         const canvas = document.getElementById('rain-canvas');
         if (!canvas) return;
@@ -275,7 +334,7 @@
         setTimeout(() => t.remove(), 3400);
     };
 
-    // Live Date Synchronizer for header
+    // Live Clock Sync
     const dateDisplay = document.getElementById('journal-date');
     if (dateDisplay) {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
