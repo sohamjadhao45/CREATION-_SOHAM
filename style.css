@@ -1,163 +1,225 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Urbanist:wght@200;400;600&display=swap');
 
+/* --- 🌌 CORE VARIABLES & CONFIG (DARK/LIGHT THEMES) --- */
 :root {
-    --bg-base: #050507; --text-primary: #f2eee9; --text-muted: rgba(242, 238, 233, 0.6);
-    --gold: #bfa46f; --gold-glow: rgba(191, 164, 111, 0.25);
+    --bg-base: #050507; 
+    --text-primary: #f2eee9; 
+    --text-muted: rgba(242, 238, 233, 0.6);
+    --gold: #bfa46f; 
+    --gold-glow: rgba(191, 164, 111, 0.25);
     
-    /* Dark Theme Antique Colors */
-    --parchment-bg: #151515; --parchment-text: #e0e0e0;
-    --parchment-shadow: inset 0 0 50px rgba(0,0,0,1), inset 0 0 15px rgba(20,20,20,0.8), var(--shadow-x, 0px) var(--shadow-y, 15px) 35px rgba(0,0,0,0.9);
-    --parchment-border: rgba(255, 255, 255, 0.08); --parchment-dropcap: #bfa46f;
+    /* Parchment Standard Configurations */
+    --parchment-bg: #151515; 
+    --parchment-text: #e0e0e0;
+    --parchment-shadow: inset 0 0 50px rgba(0,0,0,1), inset 0 0 15px rgba(20,20,20,0.8), 0px 15px 35px rgba(0,0,0,0.9);
+    --parchment-border: rgba(255, 255, 255, 0.08); 
+    --parchment-dropcap: #bfa46f;
     --seal-overlay: rgba(15,15,15,0.95);
 }
 
 [data-theme="light"] {
-    --bg-base: #f4ebd0; --text-primary: #1c160c; --text-muted: rgba(28, 22, 12, 0.7);
-    --gold: #896d38; --gold-glow: rgba(137, 109, 56, 0.2);
-    --parchment-bg: #e8dcc7; --parchment-text: #3B2210; 
-    --parchment-shadow: inset 0 0 60px rgba(139, 90, 43, 0.5), inset 0 0 20px rgba(74, 44, 17, 0.4), var(--shadow-x, 0px) var(--shadow-y, 15px) 35px rgba(0,0,0,0.3);
-    --parchment-border: rgba(59, 35, 19, 0.3); --parchment-dropcap: #2b1406;
+    --bg-base: #f4ebd0; 
+    --text-primary: #1c160c; 
+    --text-muted: rgba(28, 22, 12, 0.7);
+    --gold: #896d38; 
+    --gold-glow: rgba(137, 109, 56, 0.2);
+    --parchment-bg: #e8dcc7; 
+    --parchment-text: #3B2210; 
+    --parchment-shadow: inset 0 0 60px rgba(139, 90, 43, 0.5), inset 0 0 20px rgba(74, 44, 17, 0.4), 0px 15px 35px rgba(0,0,0,0.3);
+    --parchment-border: rgba(59, 35, 19, 0.3); 
+    --parchment-dropcap: #2b1406;
     --seal-overlay: rgba(232, 220, 199, 0.95);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { width: 100%; min-height: 100%; background-color: var(--bg-base); color: var(--text-primary); font-family: 'Urbanist', sans-serif; font-weight: 200; overflow-x: hidden; scroll-behavior: smooth; transition: background-color 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
+/* --- 📑 BASE GLOBAL RESET --- */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
+}
+html, body { 
+    width: 100%; 
+    min-height: 100%; 
+    background-color: var(--bg-base); 
+    color: var(--text-primary); 
+    font-family: 'Urbanist', sans-serif; 
+    font-weight: 200; 
+    overflow-x: hidden; 
+    scroll-behavior: smooth; 
+    transition: background-color 0.8s cubic-bezier(0.25, 1, 0.5, 1); 
+}
 
-/* ✨ Touch Ripple Effect ✨ */
-.touch-ripple { position: fixed; width: 20px; height: 20px; background: radial-gradient(circle, var(--gold) 0%, transparent 70%); border-radius: 50%; transform: translate(-50%, -50%) scale(0); animation: rippleAnim 0.8s ease-out forwards; pointer-events: none; z-index: 999999; will-change: transform, opacity; }
-@keyframes rippleAnim { to { transform: translate(-50%, -50%) scale(6); opacity: 0; } }
+/* --- ✨ TOUCH RIPPLE SYSTEM --- */
+.touch-ripple { 
+    position: fixed; 
+    width: 20px; 
+    height: 20px; 
+    background: radial-gradient(circle, var(--gold) 0%, transparent 70%); 
+    border-radius: 50%; 
+    transform: translate(-50%, -50%) scale(0); 
+    animation: rippleAnim 0.8s ease-out forwards; 
+    pointer-events: none; 
+    z-index: 999999; 
+    will-change: transform, opacity; 
+}
+@keyframes rippleAnim { 
+    to { transform: translate(-50%, -50%) scale(6); opacity: 0; } 
+}
 
-/* 🌟 INTRO & PASSPORT STYLES */
-.intro-prose { max-width: 600px; margin: 0 auto 20px; text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 16px; line-height: 1.6; color: var(--text-primary); max-height: 30vh; overflow-y: auto; padding: 0 15px; }
-.intro-prose::-webkit-scrollbar { width: 3px; }
-.intro-prose::-webkit-scrollbar-thumb { background: rgba(191,164,111,0.5); }
-.intro-prose p { margin-bottom: 12px; }
-.intro-highlight { font-style: italic; color: var(--gold); font-size: 18px; margin-top: 15px !important; }
-.passport-input { width: 100%; max-width: 300px; background: transparent; border: none; border-bottom: 1px solid rgba(191,164,111,0.5); color: var(--gold); font-family: 'Cinzel', serif; font-size: 14px; text-align: center; padding: 8px; outline: none; transition: border-color 0.3s; pointer-events: auto; }
-.passport-input:focus { border-color: var(--gold); }
-.passport-input::placeholder { color: var(--text-muted); font-family: 'Urbanist', sans-serif; font-size: 12px; letter-spacing: 1px; }
-
-/* 🤫 WHISPERING WORDS */
-.whisper-word { color: var(--gold); cursor: pointer; position: relative; display: inline-block; transition: opacity 0.3s ease; border-bottom: 1px dotted rgba(191,164,111,0.5); padding-bottom: 1px; }
-.whisper-word:active { transform: scale(0.95); }
-.whisper-word.whispered { font-style: italic; text-shadow: 0 0 8px var(--gold-glow); border-bottom: none; }
-
-#reading-progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--gold); box-shadow: 0 0 15px var(--gold); width: 0%; z-index: 9999999; transition: width 0.2s ease-out; pointer-events: none;}
-#rain-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; opacity: 0; transition: opacity 2s ease; will-change: opacity; }
-#rain-canvas.raining { opacity: 0.6; }
-
-#universe { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; transition: transform 0.1s ease-out; will-change: transform; }
-
-.drawer { position: fixed; bottom: -100%; left: 0; width: 100%; height: 50vh; background: var(--bg-base); z-index: 99999; border-top: 2px solid var(--gold); border-radius: 20px 20px 0 0; transition: bottom 0.5s cubic-bezier(0.25, 1, 0.5, 1); padding: 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.8); will-change: bottom; }
-.drawer.open { bottom: 0; }
-.drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(191,164,111,0.2); padding-bottom: 10px; margin-bottom: 15px; }
-.drawer-header h3 { font-family: 'Cinzel', serif; color: var(--gold); letter-spacing: 2px; }
-
-/* --- 🏛️ INTRO SCREEN HIGH-LEVEL CONFIG --- */
+/* --- 🏛️ INTRO SCREEN LAYER --- */
 #intro-screen { 
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #020203; 
-    z-index: 9999999 !important; display: flex; align-items: center; justify-content: center; 
-    transition: opacity 1.2s ease, transform 1.2s ease, visibility 1.2s ease; will-change: opacity, transform; 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: #020203; z-index: 9999999 !important; 
+    display: flex; align-items: center; justify-content: center; 
+    transition: opacity 1.2s ease, transform 1.2s ease, visibility 1.2s ease; 
+    will-change: opacity, transform; 
+}
+#intro-screen.fade-out { 
+    opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); 
 }
 .intro-content { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-#intro-screen.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
 .intro-title { font-family: 'Cinzel', serif; font-size: clamp(3rem, 8vw, 6rem); color: var(--gold); letter-spacing: 12px; text-shadow: 0 0 30px var(--gold-glow); }
 .intro-line { width: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 0 auto 20px; animation: widenLine 2s forwards 0.5s; }
 @keyframes widenLine { to { width: 280px; } }
+.intro-prose { max-width: 600px; margin: 0 auto 20px; text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 16px; line-height: 1.6; color: var(--text-primary); }
+.intro-highlight { font-style: italic; color: var(--gold); font-size: 18px; margin-top: 15px !important; }
+.passport-input { width: 100%; max-width: 300px; background: transparent; border: none; border-bottom: 1px solid rgba(191,164,111,0.5); color: var(--gold); font-family: 'Cinzel', serif; font-size: 14px; text-align: center; padding: 8px; outline: none; transition: border-color 0.3s; }
+.passport-input:focus { border-color: var(--gold); }
 
-.library-header { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; padding: 15px 30px; z-index: 100; font-size: 12px; background: linear-gradient(to bottom, var(--bg-base), transparent); }
-.header-left { display: flex; gap: 15px; color: var(--text-muted); }
-.btn-icon { background: transparent; border: 1px solid rgba(191,164,111,0.3); color: var(--text-primary); padding: 6px 12px; cursor: pointer; font-family: 'Cinzel', serif; font-size: 11px; margin-left: 10px; transition: all 0.3s; }
+/* --- 👑 HEADER & NAVIGATION SYSTEM --- */
+.library-header { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; z-index: 100; font-size: 12px; background: linear-gradient(to bottom, var(--bg-base), transparent); }
+.header-left { display: flex; gap: 15px; color: var(--text-muted); font-family: 'Cinzel', serif; }
+.header-divider { color: var(--gold); }
+.btn-icon { background: transparent; border: 1px solid rgba(191,164,111,0.3); color: var(--text-primary); padding: 6px 14px; cursor: pointer; font-family: 'Cinzel', serif; font-size: 11px; border-radius: 2px; transition: all 0.3s; }
 .btn-icon:hover { border-color: var(--gold); box-shadow: 0 0 8px var(--gold-glow); }
-.interactive-moon { cursor: pointer; user-select: none; transition: text-shadow 0.3s; }
+.interactive-moon { cursor: pointer; user-select: none; transition: text-shadow 0.3s; font-size: 16px; }
 
-.library-nav { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; gap: 8px; background: rgba(10, 10, 15, 0.4); padding: 6px; border-radius: 30px; backdrop-filter: blur(12px); border: 1px solid rgba(191,164,111,0.2); max-width: 95vw; overflow-x: auto; scrollbar-width: none; }
-.nav-link { background: transparent; border: none; color: var(--text-muted); padding: 8px 16px; font-family: 'Cinzel', serif; font-size: 11px; cursor: pointer; white-space: nowrap; border-radius: 20px; transition: all 0.4s; }
-.nav-link:hover, .nav-link.active-nav { color: #050507 !important; background: var(--gold); box-shadow: 0 4px 12px var(--gold-glow); }
+/* 🧭 BOTTOM SLIDE NAV BAR (PERFECT PROTECTION FIXED) */
+.library-nav { 
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
+    z-index: 2000 !important; display: flex; gap: 8px; 
+    background: rgba(10, 10, 15, 0.75); padding: 8px; 
+    border-radius: 30px; backdrop-filter: blur(20px); 
+    border: 1px solid rgba(191,164,111,0.25); 
+    max-width: 95vw; overflow-x: auto; scrollbar-width: none; 
+}
+.library-nav::-webkit-scrollbar { display: none; }
+.nav-link { background: transparent; border: none; color: var(--text-muted); padding: 10px 20px; font-family: 'Cinzel', serif; font-size: 12px; cursor: pointer; white-space: nowrap; border-radius: 20px; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+.nav-link:hover, .nav-link.active-nav { color: #050507 !important; background: var(--gold); box-shadow: 0 4px 15px var(--gold-glow); font-weight: 600; }
 
-.content { position: relative; z-index: 2; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 100px 20px 160px; }
-.page { display: none; flex-direction: column; align-items: center; width: min(850px, 100%); text-align: center; opacity: 0; pointer-events: none; transform: scale(0.9); transition: opacity 0.5s ease, transform 0.5s ease; }
+/* --- 📜 MAIN LAYOUT FRAMEWORK --- */
+.content { position: relative; z-index: 2; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 100px 20px 140px; }
+.page { display: none; flex-direction: column; align-items: center; width: min(850px, 100%); text-align: center; opacity: 0; pointer-events: none; transform: scale(0.96); transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
 .page.active { display: flex; opacity: 1; transform: scale(1); pointer-events: auto; }
 
-/* --- 🔒 MYSTERY VAULT STYLING FIXES --- */
-.page.fullscreen-vault.active { 
-    display: flex !important; position: fixed !important; top: 0; left: 0; width: 100vw !important; max-width: 100vw !important; min-height: 100vh; 
-    padding: 40px 15px; align-items: center; justify-content: center; z-index: 500; 
-    background: radial-gradient(circle, rgba(107, 140, 206, 0.05), #050507 80%); 
-}
-.vault-parchment { width: min(900px, 95%) !important; margin: 0 auto !important; }
-
-/* 🔴 WAX SEAL INTERACTIVE 🔴 */
-.wax-seal-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--seal-overlay); z-index: 50; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s ease, visibility 0.8s; border-radius: inherit; }
-.wax-seal { width: 70px; height: 70px; background: #8b0000; background-image: radial-gradient(circle at 30% 30%, #a52a2a, #500000); border-radius: 50%; box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 0 10px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; transition: transform 0.3s ease; }
-.seal-ring { width: 54px; height: 54px; border: 2px solid rgba(255,255,255,0.15); border-radius: 50%; position: absolute; pointer-events: none;}
-.seal-letter { font-family: 'Cinzel', serif; font-size: 30px; color: rgba(255,255,255,0.8); text-shadow: 1px 1px 2px #000; pointer-events: none;}
-
-.wax-seal-wrapper.broken .wax-seal { transform: scale(2.5) rotate(20deg); opacity: 0; filter: drop-shadow(0 0 30px #8b0000); transition: all 0.5s ease-out; }
-.wax-seal-wrapper.broken { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.8s ease 0.4s, visibility 0.8s 0.4s; }
-
-/* 🌕 Moon Glow */
-.heading-wrapper { position: relative; display: inline-block; margin-bottom: 10px; }
-.page1-heading { font-family: 'Cinzel', serif; color: var(--gold); letter-spacing: 8px; font-size: clamp(2.2rem, 5vw, 4.8rem); line-height: 1.15; position: relative; z-index: 2; }
-.moon-glow { animation: lunarBreathe 4s infinite alternate ease-in-out; }
-@keyframes lunarBreathe { 0% { opacity: 0.8; text-shadow: 0 0 10px var(--gold-glow); } 100% { opacity: 1; text-shadow: 0 0 25px var(--gold), 0 0 40px rgba(191,164,111,0.4); } }
-
-.meta-strip { display: flex; gap: 15px; justify-content: center; font-family: 'Cinzel', serif; font-size: 11px; margin-bottom: 15px; color: var(--gold); letter-spacing: 1px; }
-.mood-tag { background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(191,164,111,0.3); }
-.poem-interactions { margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
-.resonate-btn, .listen-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--parchment-border); color: var(--parchment-text); padding: 8px 16px; font-family: 'Cinzel', serif; font-size: 11px; cursor: pointer; border-radius: 4px; transition: all 0.3s; z-index: 10; position: relative; }
-.resonate-btn:hover, .listen-btn:hover { background: var(--gold); color: #050507; }
-.resonate-btn.active-fav, .listen-btn.active-fav { background: var(--gold); color: #050507; box-shadow: 0 0 15px var(--gold-glow); }
-
-/* ✨ ANTIQUE PARCHMENT ✨ */
+/* --- ✨ ANTIQUE PARCHMENT FRAMEWORK --- */
 .antique-parchment {
-    width: min(750px, 95%); margin: 30px 0; padding: 60px 45px !important; background-color: var(--parchment-bg) !important;
-    background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png') !important; background-blend-mode: overlay;
-    border-radius: 2px 25px 4px 18px / 20px 4px 22px 3px !important; box-shadow: var(--parchment-shadow) !important; border: 1px solid var(--parchment-border) !important;
-    position: relative; transition: box-shadow 0.2s ease-out, background-color 0.8s ease; overflow: hidden;
+    width: min(750px, 100%); margin: 20px 0; padding: 60px 45px !important; 
+    background-color: var(--parchment-bg) !important;
+    background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png') !important; 
+    background-blend-mode: overlay;
+    border-radius: 4px 30px 5px 25px / 25px 5px 30px 4px !important; 
+    box-shadow: var(--parchment-shadow) !important; 
+    border: 1px solid var(--parchment-border) !important;
+    position: relative; transition: background-color 0.8s ease; overflow: hidden;
 }
 .antique-parchment::after {
-    content: ''; position: absolute; inset: 6px; border: 1.5px dashed var(--parchment-border);
-    border-radius: 5px 22px 8px 15px / 18px 6px 20px 5px; opacity: 0.6; pointer-events: none; z-index: 1;
+    content: ''; position: absolute; inset: 8px; border: 1px dashed var(--parchment-border);
+    border-radius: 5px 25px 8px 20px; opacity: 0.5; pointer-events: none; z-index: 1;
 }
-.antique-parchment .royal-poem-text, .antique-parchment .poem-playfair { color: var(--parchment-text) !important; font-weight: 500 !important; position: relative; z-index: 2; }
 
-.drop-cap-antique { font-family: 'Cinzel', serif; float: left; font-size: 4.5rem; line-height: 3.5rem; padding-top: 5px; padding-right: 12px; color: var(--parchment-dropcap) !important; font-weight: 700; display: inline-block; }
-.royal-poem-text { font-family: 'Playfair Display', serif; font-size: clamp(17px, 2.3vw, 22px); line-height: 1.95; text-align: center; }
-.poem-playfair { font-family: 'Playfair Display', serif; font-size: clamp(18px, 2.2vw, 23px); font-style: italic; display: inline; }
-.poem-greatvibes { font-family: 'Great Vibes', cursive; font-size: clamp(28px, 3.5vw, 38px); display: block; margin-top: 25px; color: var(--gold); position: relative; z-index: 2;}
-.top-deco { color: var(--gold); letter-spacing: 6px; margin-bottom: 15px; opacity: 0.8; }
-.poem-date { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; margin-top: 15px; text-transform: uppercase; color: var(--parchment-text) !important; opacity: 0.6; }
+/* --- ✒️ POETRY TEXT STYLINGS --- */
+.heading-wrapper { position: relative; display: inline-block; margin-bottom: 15px; }
+.page1-heading { font-family: 'Cinzel', serif; color: var(--gold); letter-spacing: 6px; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.2; }
+.moon-glow { animation: lunarBreathe 4s infinite alternate ease-in-out; }
+@keyframes lunarBreathe { 
+    0% { text-shadow: 0 0 10px var(--gold-glow); opacity: 0.9; } 
+    100% { text-shadow: 0 0 25px var(--gold), 0 0 40px rgba(191,164,111,0.3); opacity: 1; } 
+}
 
-/* 📚 BOOKSHELF LAYOUT */
+.royal-poem-text { font-family: 'Playfair Display', serif; font-size: clamp(18px, 2.4vw, 22px); line-height: 2; text-align: center; color: var(--parchment-text) !important; position: relative; z-index: 2; }
+.poem-playfair { font-style: italic; font-weight: 400; }
+.drop-cap-antique { font-family: 'Cinzel', serif; float: left; font-size: 4.8rem; line-height: 3.8rem; padding-top: 6px; padding-right: 12px; color: var(--parchment-dropcap) !important; font-weight: 700; }
+.poem-greatvibes { font-family: 'Great Vibes', cursive; font-size: clamp(30px, 4vw, 40px); display: block; margin-top: 30px; color: var(--gold); }
+.top-deco { color: var(--gold); letter-spacing: 8px; margin-bottom: 20px; opacity: 0.7; font-size: 14px; }
+.poem-date { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; margin-top: 20px; color: var(--parchment-text); opacity: 0.5; }
+
+/* --- 🔊 BUTTONS & INTERACTION ZONES --- */
+.poem-interactions { margin-top: 35px; display: flex; gap: 15px; justify-content: center; }
+.resonate-btn, .listen-btn { background: rgba(0, 0, 0, 0.2); border: 1px solid var(--parchment-border); color: var(--parchment-text); padding: 10px 22px; font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 1px; cursor: pointer; border-radius: 4px; transition: all 0.3s ease; position: relative; z-index: 10; }
+.resonate-btn:hover, .listen-btn:hover { background: var(--gold); color: #050507; border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 5px 15px var(--gold-glow); }
+.resonate-btn.active-fav, .listen-btn.active-fav { background: #bfa46f; color: #050507; font-weight: 600; box-shadow: 0 0 15px var(--gold); }
+
+/* --- 📚 ADVANCED BOOKSHELF STRUCTURE --- */
 .bookshelf-container { width: min(650px, 100%); margin: 40px auto; }
-.bookshelf-row { display: flex; justify-content: center; align-items: flex-end; gap: 15px; padding: 0 10px; }
-.book-spine { width: 60px; height: 240px; background: linear-gradient(90deg, #421212, #6b2323, #300d0d); border-radius: 5px 5px 0 0; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: transform 0.4s ease; box-shadow: 5px 0 15px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; flex-direction: column; will-change: transform;}
-.spine-gold { background: linear-gradient(90deg, #59431e, #8c6b32, #403014); height: 260px; }
-.spine-text { transform: rotate(-90deg); white-space: nowrap; font-family: 'Cinzel', serif; font-size: 11px; color: #dfc89e; letter-spacing: 2px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 20px;}
-.shelf-wood { width: 100%; height: 18px; background: linear-gradient(to bottom, #3d2314, #120b05); border-radius: 2px; box-shadow: 0 10px 20px rgba(0,0,0,0.6); }
-.book-spine:hover { transform: translateY(-20px) scale(1.03) rotateZ(2deg); box-shadow: 10px 20px 30px rgba(0,0,0,0.7); }
+.bookshelf-row { display: flex; justify-content: center; align-items: flex-end; gap: 12px; padding: 0 10px; }
+.book-spine { width: 55px; height: 230px; background: linear-gradient(90deg, #421212, #6b2323, #300d0d); border-radius: 4px 4px 0 0; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s; display: flex; align-items: center; justify-content: center; box-shadow: 4px 0 12px rgba(0,0,0,0.6); will-change: transform; }
+.spine-gold { background: linear-gradient(90deg, #59431e, #8c6b32, #403014); height: 250px; }
+.spine-text { transform: rotate(-90deg); white-space: nowrap; font-family: 'Cinzel', serif; font-size: 11px; color: #dfc89e; letter-spacing: 2px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+.book-spine:hover { transform: translateY(-18px) scale(1.04) rotateZ(2deg); box-shadow: 8px 15px 25px rgba(0,0,0,0.7); }
+.shelf-wood { width: 100%; height: 16px; background: linear-gradient(to bottom, #3d2314, #120b05); border-radius: 2px; box-shadow: 0 8px 15px rgba(0,0,0,0.6); }
 
-.button-row { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px; position: relative; z-index: 10; }
-.mt-20 { margin-top: 20px; }
-button:not(.nav-link):not(.btn-icon) { cursor: pointer; padding: 13px 28px; font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; border-radius: 2px; transition: transform 0.2s, box-shadow 0.2s; }
-.btn-solid { background: var(--gold); color: #050507; border: 1px solid var(--gold); font-weight: 600; }
-.btn-outline { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
-button:not(.nav-link):hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--gold-glow); }
+/* --- ✒️ VISITOR JOURNAL SECTION --- */
+.visitor-journal { display: flex; max-width: 400px; margin: 20px auto; width: 100%; border-bottom: 1px solid var(--gold); padding-bottom: 5px; }
+.journal-input { background: transparent; border: none; outline: none; color: var(--text-primary); font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; flex-grow: 1; padding: 5px; }
+.journal-submit { background: transparent; border: none; color: var(--gold); cursor: pointer; font-size: 18px; transition: transform 0.3s; }
+.journal-submit:hover { transform: scale(1.2) rotate(-10deg); }
 
-#toast-container { position: fixed; top: 80px; right: 20px; z-index: 999999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-.toast { background: var(--gold); color: #000; font-family: 'Cinzel'; font-weight: bold; font-size: 12px; padding: 12px 24px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: slideInRight 0.4s ease forwards; }
-@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+/* --- 👥 AUTHOR GUILD GRID DECO --- */
+.author-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; margin-top: 20px; }
+.avatar-placeholder { width: 60px; height: 60px; border: 1px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 15px; background: rgba(0,0,0,0.2); }
+.author-name { font-family: 'Cinzel', serif; color: var(--gold); font-size: 20px; margin-bottom: 10px; }
+.chamber-stat { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 4px; }
 
-.library-footer { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; background: linear-gradient(to top, var(--bg-base), transparent); z-index: 90; text-align: center; pointer-events: none; }
-.footer-divider { width: min(400px, 80%); height: 1px; background: linear-gradient(90deg, transparent, rgba(191,164,111,0.2), transparent); margin: 0 auto 10px; }
-#quote-rotator { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 14px; color: var(--gold); letter-spacing: 1px; margin-bottom: 5px; }
-.footer-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
-
-@media (max-width: 768px) {
-    .library-header { padding: 10px 15px; flex-wrap: wrap; justify-content: center; gap: 10px;} 
-    .antique-parchment { padding: 40px 20px !important; }
-    .button-row { flex-direction: column; width: 100%; align-items: center; }
-    .library-nav { bottom: 60px; max-width: 90vw; }
-    .poem-interactions { flex-direction: column; align-items: center; }
+/* --- 🔒 EXTRA SECURE MYSTERY VAULT LAYOUT --- */
+.page.fullscreen-vault.active { 
+    display: flex !important; position: fixed !important; top: 0; left: 0; 
+    width: 100vw !important; max-width: 100vw !important; min-height: 100vh; 
+    padding: 30px 15px; align-items: center; justify-content: center; z-index: 1500 !important; 
+    background: radial-gradient(circle, rgba(15, 15, 25, 0.98), #030305 90%); 
 }
+.vault-parchment { width: min(850px, 95%) !important; margin: 0 auto !important; position: relative; }
+.wax-seal-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--seal-overlay); z-index: 50; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s ease, visibility 0.8s; border-radius: inherit; }
+.wax-seal { width: 75px; height: 75px; background: radial-gradient(circle at 30% 30%, #a52a2a, #500000); border-radius: 50%; box-shadow: 0 6px 20px rgba(0,0,0,0.7), inset 0 0 10px rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s ease; }
+.wax-seal:hover { transform: scale(1.05); }
+.seal-ring { width: 58px; height: 58px; border: 1.5px dashed rgba(255,255,255,0.2); border-radius: 50%; position: absolute; }
+.seal-letter { font-family: 'Cinzel', serif; font-size: 32px; color: rgba(255,255,255,0.85); text-shadow: 1px 2px 4px #000; }
+.wax-seal-wrapper.broken .wax-seal { transform: scale(3) rotate(35deg); opacity: 0; filter: blur(5px); transition: all 0.6s ease-out; }
+.wax-seal-wrapper.broken { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.8s ease 0.3s, visibility 0.8s 0.3s; }
+
+/* --- 🗄️ BOOKMARKS LEDGER DRAWER --- */
+.drawer { position: fixed; bottom: -100%; left: 0; width: 100%; height: 45vh; background: var(--bg-base); z-index: 5000 !important; border-top: 2px solid var(--gold); border-radius: 20px 20px 0 0; transition: bottom 0.5s cubic-bezier(0.25, 1, 0.5, 1); padding: 25px; box-shadow: 0 -10px 40px rgba(0,0,0,0.8); }
+.drawer.open { bottom: 0; }
+.drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(191,164,111,0.2); padding-bottom: 12px; }
+.drawer-header h3 { font-family: 'Cinzel', serif; color: var(--gold); letter-spacing: 2px; font-size: 16px; }
+.bookmark-item { font-family: 'Cinzel', serif; font-size: 14px; color: var(--text-primary); padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: background 0.3s; }
+.bookmark-item:hover { background: rgba(191, 164, 111, 0.08); color: var(--gold); }
+
+/* --- 🤫 SECRETS & UTILITIES --- */
+.whisper-word { color: var(--gold); cursor: pointer; border-bottom: 1px dotted var(--gold); transition: all 0.3s; }
+.whisper-word.whispered { font-style: italic; border: none; text-shadow: 0 0 8px var(--gold); }
+#reading-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--gold); box-shadow: 0 0 10px var(--gold); width: 0%; z-index: 9999999; pointer-events: none; }
+#rain-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; opacity: 0; transition: opacity 2s ease; }
+#rain-canvas.raining { opacity: 1; }
+
+/* 🍞 TOAST SYSTEM */
+#toast-container { position: fixed; top: 30px; right: 30px; z-index: 9999999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast { background: var(--gold); color: #050507; font-family: 'Cinzel'; font-weight: 600; font-size: 12px; padding: 12px 24px; border-radius: 2px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: slideIn 0.3s ease forwards; }
+@keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* --- 📜 FOOTER LAYER --- */
+.library-footer { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px; background: linear-gradient(to top, var(--bg-base), transparent); z-index: 90; text-align: center; pointer-events: none; }
+.footer-divider { width: 200px; height: 1px; background: linear-gradient(90deg, transparent, rgba(191,164,111,0.2), transparent); margin: 0 auto 8px; }
+#quote-rotator { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: var(--gold); }
+.footer-sub { font-size: 9px; color: var(--text-muted); letter-spacing: 1px; margin-top: 2px; }
+
+/* --- 📱 EXTREME RESPONSIVE MEDIA QUERIES --- */
+@media (max-width: 768px) {
+    .library-header { padding: 12px 20px; }
+    .antique-parchment { padding: 40px 24px !important; margin: 10px 0; }
+    .royal-poem-text { line-height: 1.8; }
+    .library-nav { bottom: 20px; padding: 6px; width: 92vw; }
+    .nav-link { padding: 8px 14px; font-size: 11px; }
+    .poem-interactions { flex-direction: column; gap: 10px; width: 100%; }
+    .resonate
