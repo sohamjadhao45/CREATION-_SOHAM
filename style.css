@@ -255,24 +255,23 @@ body.on-entrance .library-footer {
     background: transparent;
 }
 
-/* 3. HORIZONTAL SCROLLABLE STRIP: Fixes the un-scrollable horizontal pill nav */
+
+/* 3. HORIZONTAL SCROLLABLE STRIP: Fixed and perfectly centered across all screens */
 .library-nav {
     position: fixed !important;
-    bottom: 75px !important; /* Fixed above the footer text */
-    left: 0 !important;
-    width: 100% !important;
+    bottom: 75px !important; /* Fixed exactly above the footer text */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 95% !important; /* Screen se thoda gap banakar rakhega */
+    max-width: 550px !important; /* Desktop par bada nahi hoga, mobile par full screen touch scroll hoga */
     z-index: 99998 !important;
     display: flex !important;
-    overflow-x: auto !important; /* Enables horizontal scrolling */
-    white-space: nowrap !important; /* Keeps items in a single line */
+    overflow-x: auto !important; /* Enables smooth horizontal scrolling */
+    white-space: nowrap !important; /* Keeps items elegantly in a single row */
     padding: 10px 20px !important;
     box-sizing: border-box !important;
-    scrollbar-width: none; /* Hides scrollbar for clean look Firefox */
+    scrollbar-width: none !important; /* Hides scrollbar on Firefox */
     -webkit-overflow-scrolling: touch !important; /* Smooth momentum scroll on iOS/Android */
-}
-
-.library-nav::-webkit-scrollbar {
-    display: none; /* Hides scrollbar for Chrome/Safari */
 }
 
 /* 4. FIXED FOOTER TEXT: Thought and copyright locked at the very bottom */
