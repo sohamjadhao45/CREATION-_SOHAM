@@ -1,222 +1,492 @@
-/* ==========================================================================
-   THE MIDNIGHT LIBRARY - ULTIMATE CORE ENGINE
-   (Restores All Effects: Rain, Audio, Seals, Moon 3-Click, Navigation)
-   ========================================================================== */
+/* =====================================================================
+   THE MIDNIGHT LIBRARY ENGINE (ULTIMATE PRO EDITION)
+   Linter-Safe | Interactive Rub Wax Seal | 11:11 Easter Egg
+   ===================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-    
-    // ---- 1. WELCOME SCREEN & ENTRANCE LOCK ----
-    document.body.classList.add('on-entrance');
-    const enterBtn = document.getElementById('enter-library-btn') || document.querySelector('.btn-solid');
-    if(enterBtn) {
-        enterBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.body.classList.remove('on-entrance');
-            const intro = document.getElementById('intro-screen');
-            if(intro) {
-                intro.classList.add('fade-out');
-                setTimeout(() => intro.style.display = 'none', 1200);
-            }
-            if (typeof window.showToast === "function") window.showToast("✨ Welcome to the Sanctuary.");
+    "use strict";
+
+    /* ======================================================
+       📜 POEM DATABASE (AUTO-BUILD)
+       ====================================================== */
+    const POEM_DATABASE = [
+        {
+            chapterLabel: "CHAPTER I", spineLabel: "ANCHOR - CH.I", title: "ANCHOR", subtitle: "A TRIBUTE TO MY FATHER", themeTag: "❤️ Family & Love", dateText: "A memory from June, 2026", signature: "-- Soham Jadhao<br>Love You Pappa !!!!",
+            text: `You're my truth, my life,\nmy beginning, my end.\nYou know my weaknesses and flaws,\nyet you're my buddy and my friend.\n\nThis relation is not only of blood,\nbut of emotions and linked hearts too.\nAmong all the bonds I've ever known,\nyou're a part of me, I'm a part of you.\n\nAs love has no age limit,\nthat's why my love for you stays true.\nYour morals and your way of seeing life\nhave taught me something new.\n\nWords are too few to describe you,\neven calamities fear facing you.\nYou're present in my every breath,\nand I know what you truly mean to me.`,
+            whispers: [ { word: "friend", hidden: "mirror" }, { word: "blood", hidden: "soul" } ]
+        },
+        {
+            chapterLabel: "CHAPTER II", spineLabel: "SPORTSMAN - CH.II", title: "SPORTSMAN<br>SPIRIT", subtitle: "THE SPIRIT OF EXCELLENCE", themeTag: "⚡ Motivation", dateText: "Written on 16 June 2026", signature: "— Soham Jadhao",
+            text: `Ignite your fire.\nLearn from every downfall,\nBouncers will come and go,\nDon't fear the pavilion's call.\n\nNever get upset,\nFace every yorker,\nBuild your own present,\nYour ace will be your marker.\n\nSometimes a hundred,\nSometimes a duck,\nGive your best always,\nAnd leave the rest to luck.\n\nThe past is your best teacher,\nThe future, an unseen creature,\nSpread your wings in the present sky,\nEvery great score begins with a try.`,
+            whispers: [ { word: "duck", hidden: "lesson" } ]
+        }
+    ];
+
+    const UPCOMING_CHAPTER = { chapterNum: "III", title: "THE COSMOS WITHIN" };
+
+    window.twMasterState = {}; // Global state to avoid linter warnings on DOM nodes
+    const globalState = { activeTheme: "dark", audioContext: null, isAudioPlaying: false, vortexActive: false, secretClicks: 0, notesVisitCount: 0, secretPassword: "", hasTappedMoon: false, hasTypedWord: false, rainActive: false, visitorName: "Wanderer", elevenElevenTriggered: false };
+
+    const quoteDatabase = ['"Every silence contains a poem."', '"The moon remembers what we choose to forget."', '"Ink writes the history of spirits navigating the dark."', '"A library is a hospital for the mind."', '"Words are the architecture of fleeting emotions."'];
+    const moonWords = ["silence", "poetry", "creation", "memories", "love", "solitude", "eternity"];
+    const midnightThoughts = ["The moon has seen every version of you.", "Not every chapter deserves a sequel.", "Some memories glow brighter after they're gone.", "The hardest part of moving forward is not looking back.", "We bury our loudest screams in the quietest poetry."];
+    const notesCombos = [
+        ["The hardest goodbyes are the ones that happen quietly.", "Some people become memories before they leave.", "Happiness often arrives disguised as ordinary moments."],
+        ["Words are the shadows of deep hidden emotions.", "The moon remembers everything we choose to forget.", "Ink writes the history of spirits navigating the dark."],
+        ["A quiet mind hears the loudest truths.", "Echoes of yesterday build the walls of tomorrow.", "Time is a silent thief, taking only what we love."],
+        ["Stars do not beg for attention, they just shine.", "Oceans hide their deepest secrets beneath calm waves.", "Mountains teach patience to those who climb them."],
+        ["To feel deeply is both a curse and a blessing.", "Scars are just poetry written on the human skin.", "A single teardrop holds an entire ocean of sorrow."]
+    ];
+    const starCoords = [{top: 50, left: 20}, {top: 20, left: 50}, {top: 60, left: 80}, {top: 80, left: 40}, {top: 30, left: 85}, {top: 75, left: 15}];
+
+    buildLibrarySystem(); 
+    initClockAndAtmosphere(); initUltimateUniverseBackground(); initCosmicNavigation(); 
+    initLibraryFeatures(); initScrollProgressBar(); initSecretKeyboardVault(); initLedger();
+    initDynamicShadows(); initBookmarksDrawer(); initTimeCapsule(); initPassport(); initTouchRipple();
+
+    /* --- ✨ GOLDEN TOUCH RIPPLES ✨ --- */
+    function initTouchRipple() {
+        document.body.addEventListener('click', (e) => {
+            const ripple = document.createElement('div');
+            ripple.className = 'touch-ripple';
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 800);
         });
     }
 
-    // ---- 2. SAFE PAGE NAVIGATION (Will NOT overwrite your HTML Text) ----
-    window.switchPage = function(targetPageId) {
-        // Stop Voice Engine on page change
-        if (window.speechSynthesis && window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
-            document.querySelectorAll('.listen-btn').forEach(btn => btn.innerHTML = "🎙️ LISTEN TO THE VERSE");
-        }
+    function initPassport() {
+        const input = document.getElementById("visitor-name");
+        const enterBtn = document.getElementById("enter-library-btn");
+        const savedName = localStorage.getItem("midnightVisitor");
+        if(savedName && input) input.value = savedName;
 
-        // Handle vortex animations for active pages
-        const activePage = document.querySelector('.page.active, .screen.active');
-        const targetPage = document.getElementById(targetPageId);
-        
-        if (!targetPage || activePage === targetPage) return;
-
-        if (activePage) {
-            activePage.classList.add('vortex-out');
-            setTimeout(() => {
-                activePage.classList.remove('active', 'vortex-out');
-                executePageIn(targetPage);
-            }, 400); 
-        } else {
-            executePageIn(targetPage);
-        }
-
-        // Sync Bottom Navigation Tabs
-        document.querySelectorAll('.nav-link').forEach(link => {
-            if(link.getAttribute('onclick')?.includes(targetPageId)) {
-                link.classList.add('active-nav');
-            } else {
-                link.classList.remove('active-nav');
-            }
-        });
-    };
-
-    function executePageIn(targetPage) {
-        targetPage.classList.add('vortex-in', 'active');
-        targetPage.offsetHeight; // Force DOM repaint
-        targetPage.classList.remove('vortex-in');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // ---- 3. WAX SEAL BREAK ENGINE ----
-    const waxSeals = document.querySelectorAll('.wax-seal, .sj-seal');
-    waxSeals.forEach(seal => {
-        seal.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const wrapper = this.closest('.wax-seal-wrapper');
-            if(wrapper) {
-                wrapper.classList.add('broken');
-            } else {
-                this.classList.add('broken');
-                setTimeout(() => this.style.display = 'none', 800);
-            }
-            if (typeof window.showToast === "function") window.showToast("👁️ Vault Seal Broken. Forbidden contents exposed.");
-        });
-    });
-
-    // ---- 4. MYSTERY VAULT (3-CLICK MOON LOGIC) ----
-    let moonClicks = 0;
-    let clickTimer = null;
-    const moonElement = document.querySelector('.interactive-moon, .moon-visual, .waxing-gibbous');
-    
-    if (moonElement) {
-        moonElement.style.cursor = "pointer";
-        moonElement.addEventListener('click', () => {
-            moonClicks++;
-            
-            if (moonClicks === 2) {
-                if (typeof window.showToast === "function") window.showToast("The moon shifts its gaze...");
-            }
-            
-            if (moonClicks === 3) {
-                if (typeof window.showToast === "function") window.showToast("👁️ Mystery Vault Unlocked");
+        if(enterBtn) {
+            enterBtn.addEventListener("click", () => {
+                let name = input ? input.value.trim() : "";
+                if(!name) name = "Wanderer";
+                localStorage.setItem("midnightVisitor", name);
+                globalState.visitorName = name;
                 
-                // Switch to Vault ID (Make sure 'page-secret' matches your HTML ID for the vault)
-                window.switchPage('page-secret'); 
-                moonClicks = 0;
-            }
+                const greeting = document.getElementById("vault-greeting");
+                if(greeting) greeting.innerHTML = `Ah, <span style="color:var(--gold);">${name}</span>... welcome to the Secret Vault.`;
 
-            clearTimeout(clickTimer);
-            clickTimer = setTimeout(() => { moonClicks = 0; }, 3000);
+                document.getElementById("intro-screen").classList.add("fade-out");
+                tryStartupAudio();
+            });
+        }
+    }
+
+    function buildLibrarySystem() {
+        const nav = document.getElementById("library-nav"); const bookshelf = document.getElementById("dynamic-bookshelf"); const starMap = document.getElementById("star-map"); const authorScripting = document.getElementById("author-scripting-status"); const secretPage = document.getElementById("page-secret");
+        nav.innerHTML = `<button class="nav-link active-nav" data-target="page1">Library Entrance</button>`; bookshelf.innerHTML = ""; let prevPageId = "page1";
+
+        POEM_DATABASE.forEach((poem, i) => {
+            const pageId = `poem-page-${i + 1}`; const nextPageId = i < POEM_DATABASE.length - 1 ? `poem-page-${i + 2}` : `page-fragments`;
+            nav.innerHTML += `<button class="nav-link" data-target="${pageId}">${poem.chapterLabel}</button>`;
+            const cleanTitle = poem.title.replace('<br>', ' '); const safeText = poem.text.replace(/\n/g, '\\n');
+
+            const sectionHtml = `
+            <section id="${pageId}" class="page" data-poem-index="${i}">
+              <div class="top-deco">✧ ─ ❦ ─ ✧</div>
+              <span class="chapter-badge">${poem.chapterLabel}</span>
+              <div class="heading-wrapper"><h2 class="page1-heading moon-glow">${poem.title}</h2></div>
+              <p class="poem-subtitle">${poem.subtitle}</p>
+              <div class="meta-strip" style="margin: 15px 0;">
+                <span class="mood-tag tag-motivation">${poem.themeTag}</span>
+                <span class="read-time">⏱️ 1 Min Read</span>
+                <button class="bookmark-btn btn-utility" data-poem="${poem.spineLabel}" style="border: none; background: transparent; padding: 0 !important; cursor: pointer; color: var(--gold);">🔖 Bookmark</button>
+              </div>
+              <div class="poetry-box antique-parchment dynamic-shadow" id="card-${pageId}">
+                <div class="wax-seal-wrapper"><div class="wax-seal"><div class="seal-ring"></div><span class="seal-letter">SJ</span></div></div>
+                <p class="royal-poem-text typewriter-poem" data-lines="${safeText}"></p><br>
+                <p class="poem-date">${poem.dateText}</p>
+                <span class="poem-greatvibes sign-animate">${poem.signature}</span>
+                <div class="poem-interactions"><button class="resonate-btn">⭐ Resonated With Me</button><button class="listen-btn" title="Future Feature">🎙️ Listen: SOON</button></div>
+              </div>
+              <div class="visitor-journal"><input type="text" placeholder="Leave a silent thought here..." class="journal-input ledger-input"><button class="journal-submit ledger-submit">🖋️</button></div>
+              <div class="button-row" style="margin-top: 15px;">
+                <button class="btn-utility download-poem-btn" data-target="card-${pageId}" data-poem-index="${i}">📸 Save For Insta Story</button>
+                <button class="btn-utility share-poem-btn" data-poem-title="${cleanTitle}">🔗 Share Verse</button>
+              </div>
+              <div class="button-row mt-20"><button class="btn-outline trigger-nav" data-target="${prevPageId}">❮ Previous</button><button class="btn-solid trigger-nav" data-target="${nextPageId}">Next ❯</button></div>
+            </section>`;
+            secretPage.insertAdjacentHTML('beforebegin', sectionHtml);
+            bookshelf.innerHTML += `<div class="book-spine ${i % 2 !== 0 ? 'spine-gold' : ''} trigger-nav" data-target="${pageId}"><div class="spine-text">${poem.spineLabel}</div></div>`;
+            prevPageId = pageId;
+        });
+
+        nav.innerHTML += `<button class="nav-link" data-target="page-fragments">Notes Room</button><button class="nav-link" data-target="page-archive">Ancient Shelf</button><button class="nav-link" data-target="page-about">Author's Chamber</button>`;
+        document.getElementById("btn-explore").setAttribute("data-target", "poem-page-1"); document.getElementById("btn-frag-prev").setAttribute("data-target", `poem-page-${POEM_DATABASE.length}`);
+        bookshelf.innerHTML += `<div class="book-spine spine-locked interactive-locked" title="Some stories are still being lived."><div class="spine-text">${UPCOMING_CHAPTER.title}</div><div class="spine-subtext" style="position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 8px; color: rgba(255,255,255,0.4);">UNAVAILABLE</div></div>`;
+
+        let svgLines = ''; let starsHtml = '';
+        for (let i = 0; i < POEM_DATABASE.length; i++) {
+            let p1 = starCoords[i]; starsHtml += `<div class="star-node active-star trigger-nav" data-target="poem-page-${i+1}" title="${POEM_DATABASE[i].dateText} - ${POEM_DATABASE[i].title.replace('<br>',' ')}" style="top: ${p1.top}%; left: ${p1.left}%;"></div>`;
+            if (i < POEM_DATABASE.length - 1) { let p2 = starCoords[i+1]; svgLines += `<line x1="${p1.left}%" y1="${p1.top}%" x2="${p2.left}%" y2="${p2.top}%" stroke="rgba(191,164,111,0.4)" stroke-width="1" stroke-dasharray="4" />`; }
+        }
+        if (POEM_DATABASE.length > 0) {
+            let lastStar = starCoords[POEM_DATABASE.length - 1]; let lockedStar = starCoords[POEM_DATABASE.length];
+            svgLines += `<line x1="${lastStar.left}%" y1="${lastStar.top}%" x2="${lockedStar.left}%" y2="${lockedStar.top}%" stroke="rgba(191,164,111,0.1)" stroke-width="1" stroke-dasharray="4" />`;
+            starsHtml += `<div class="star-node pulse-star interactive-locked" title="Awaiting Completion..." style="top: ${lockedStar.top}%; left: ${lockedStar.left}%;"></div>`;
+        }
+        starMap.innerHTML = `<svg width="100%" height="100%" style="position: absolute; top:0; left:0; z-index: 1;">${svgLines}</svg>${starsHtml}`;
+        authorScripting.innerHTML = `<span class="pulse-dot"></span><strong>Currently Scripting:</strong> Chapter ${UPCOMING_CHAPTER.chapterNum}: ${UPCOMING_CHAPTER.title}`;
+    }
+
+    const thoughtBtn = document.getElementById("reveal-thought-btn");
+    const thoughtDisplay = document.getElementById("midnight-thought-display");
+    if(thoughtBtn && thoughtDisplay) {
+        thoughtBtn.addEventListener("click", () => {
+            thoughtDisplay.style.opacity = 0;
+            setTimeout(() => { thoughtDisplay.innerText = `"${midnightThoughts[Math.floor(Math.random() * midnightThoughts.length)]}"`; thoughtDisplay.style.opacity = 0.8; }, 300);
         });
     }
 
-    // ---- 5. INTERNAL BUTTON ROUTING (Explore & Author) ----
-    document.querySelectorAll('button').forEach(btn => {
-        const text = btn.innerText.toUpperCase();
-        if (text.includes('EXPLORE CHAPTERS')) {
-            btn.addEventListener('click', () => window.switchPage('page-archive')); // Ancient Shelf ID
-        }
-        if (text.includes("AUTHOR'S CHAMBER")) {
-            btn.addEventListener('click', () => window.switchPage('page-about')); // Author Chamber ID
-        }
-    });
-
-    // ---- 6. AUDIO TTS & ATMOSPHERIC RAIN ENGINE ----
-    let currentSpeech = null;
-    let rainInterval = null;
-
-    // Listen Button
-    document.querySelectorAll('.listen-btn, #listen-btn').forEach(listenBtn => {
-        listenBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (window.speechSynthesis.speaking) {
-                window.speechSynthesis.cancel();
-                this.innerHTML = "🎙️ LISTEN TO THE VERSE";
-                return;
-            }
-            
-            // Read text from the currently active page
-            const activePage = document.querySelector('.page.active');
-            const textToRead = activePage ? activePage.innerText : document.body.innerText;
-            
-            currentSpeech = new SpeechSynthesisUtterance(textToRead);
-            currentSpeech.rate = 0.88;
-            currentSpeech.onstart = () => { this.innerHTML = "🛑 STOP LISTENING"; };
-            currentSpeech.onend = () => { this.innerHTML = "🎙️ LISTEN TO THE VERSE"; };
-            window.speechSynthesis.speak(currentSpeech);
+    function initDynamicShadows() {
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20; const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            document.documentElement.style.setProperty('--shadow-x', `${x}px`); document.documentElement.style.setProperty('--shadow-y', `${15 + y}px`);
         });
-    });
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (e) => {
+                if(!e.gamma || !e.beta) return;
+                const x = (e.gamma / 90) * 15; const y = (e.beta / 90) * 15; 
+                document.documentElement.style.setProperty('--shadow-x', `${x}px`); document.documentElement.style.setProperty('--shadow-y', `${15 + y}px`);
+            });
+        }
+    }
 
-    // Rain Toggle
-    const rainToggle = document.getElementById('rain-toggle');
-    if (rainToggle) {
-        rainToggle.addEventListener('click', function() {
-            const canvas = document.getElementById('rain-canvas');
-            if (!canvas) return;
-            canvas.classList.toggle('raining');
-            const ctx = canvas.getContext('2d');
-            
-            if (canvas.classList.contains('raining')) {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                let drops = Array(Math.floor(window.innerWidth / 8)).fill(0);
-                rainInterval = setInterval(() => {
-                    ctx.fillStyle = 'rgba(5, 5, 7, 0.15)';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = 'rgba(191, 164, 111, 0.2)';
-                    ctx.font = '10px monospace';
-                    drops.forEach((y, x) => {
-                        ctx.fillText('|', x * 8, y);
-                        if (y > canvas.height && Math.random() > 0.98) drops[x] = 0;
-                        else drops[x] = y + 12;
-                    });
-                }, 33);
-                if (typeof window.showToast === "function") window.showToast("🌧️ Atmospheric rain activated.");
-            } else {
-                clearInterval(rainInterval);
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function initTimeCapsule() {
+        const capsule = document.getElementById("time-capsule-item"); const status = document.getElementById("capsule-status");
+        if(!capsule || !status) return;
+        if (new Date() >= new Date("January 1, 2027 00:00:00")) { status.innerHTML = `<span style="color:var(--gold);">Unlocked. "To the me who survived, thank you."</span>`; } 
+        else { status.innerText = "A letter to the future. Sealed until January 1, 2027."; }
+    }
+
+    function initScrollProgressBar() { window.addEventListener("scroll", () => { let st = window.scrollY || document.documentElement.scrollTop; let sh = document.documentElement.scrollHeight - window.innerHeight; document.getElementById("reading-progress").style.width = sh > 0 ? ((st / sh) * 100) + "%" : "0%"; }); }
+
+    function checkUltimateVault() {
+        const condMoon = document.getElementById("cond-moon"); const condNotes = document.getElementById("cond-notes"); const condWord = document.getElementById("cond-word"); if(!condMoon) return;
+        condMoon.innerText = globalState.hasTappedMoon ? "✅ Moon Tapped (3/3)" : `❌ Moon Tapped (${globalState.secretClicks}/3)`;
+        condNotes.innerText = globalState.notesVisitCount >= 5 ? "✅ Notes Room Visits (5/5)" : `❌ Notes Room Visits (${globalState.notesVisitCount}/5)`;
+        if(globalState.hasTypedWord) condWord.innerText = "✅ Secret Word Typed";
+
+        if(globalState.hasTappedMoon && globalState.notesVisitCount >= 5 && globalState.hasTypedWord) {
+            document.getElementById("quest-conditions").style.display = "none"; document.getElementById("hidden-poem-container").style.display = "block"; document.getElementById("ultimate-secret-log").querySelector("strong").innerText = "🔓 Vault Log #003 (Status: Unlocked)";
+        }
+    }
+
+    function initSecretKeyboardVault() {
+        const randomIndex = Math.floor(Math.random() * moonWords.length);
+        globalState.secretPassword = moonWords[randomIndex];
+        const wordDisplay = document.getElementById("secret-word");
+        if(wordDisplay) wordDisplay.innerText = globalState.secretPassword;
+
+        let inputBuffer = "";
+        window.addEventListener("keydown", (e) => {
+            if (e.key.length === 1 && e.key.match(/[a-z]/i)) inputBuffer += e.key.toLowerCase();
+            if (inputBuffer.endsWith("rain") && !globalState.rainActive) toggleRain();
+            if (inputBuffer.length > globalState.secretPassword.length) inputBuffer = inputBuffer.substring(inputBuffer.length - globalState.secretPassword.length);
+            if (inputBuffer === globalState.secretPassword) {
+                globalState.hasTypedWord = true; checkUltimateVault(); showToast("👁️ The Vault Opens...");
+                const vaultBtn = document.querySelector(".trigger-nav[data-target='page-secret']");
+                if (vaultBtn) { vaultBtn.click(); } else { document.getElementById('page-secret').classList.add('active'); }
+                inputBuffer = ""; 
             }
         });
     }
 
-    // ---- 7. DRAWERS & LOCAL STORAGE ----
-    window.toggleDrawer = function(drawerId) {
-        window.closeAllDrawers();
-        const drawer = document.getElementById(drawerId);
-        if (drawer) drawer.classList.add('open');
-    };
+    function initLedger() {
+        const ledgerList = document.getElementById("ledger-list"); const submits = document.querySelectorAll(".ledger-submit"); const inputs = document.querySelectorAll(".ledger-input");
+        let entries = JSON.parse(localStorage.getItem('midnightLedger') || '[]');
+        function renderLedger() {
+            if(!ledgerList) return; ledgerList.innerHTML = "";
+            if(entries.length === 0) { ledgerList.innerHTML = `<p style="margin-bottom: 8px; font-style: italic; opacity:0.5;">No wandering souls have left a mark yet...</p>`; } 
+            else { entries.forEach(e => { ledgerList.innerHTML += `<p style="margin-bottom: 8px; font-style: italic;">"${e.text}" <span style="font-size:11px; opacity:0.5;">— ${e.date}</span></p>`; }); }
+        }
+        renderLedger();
+        submits.forEach((btn, index) => {
+            btn.addEventListener("click", () => {
+                const input = inputs[index];
+                if(input && input.value.trim() !== "") {
+                    entries.unshift({ text: input.value.trim(), date: new Date().toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' }) });
+                    if(entries.length > 10) entries.pop(); localStorage.setItem('midnightLedger', JSON.stringify(entries)); input.value = ""; showToast("🖋️ Your silence has been recorded."); renderLedger();
+                }
+            });
+        });
+    }
 
-    window.closeAllDrawers = function() {
-        document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
-    };
+    function toggleRain() {
+        globalState.rainActive = !globalState.rainActive; const rCanvas = document.getElementById("rain-canvas");
+        if(globalState.rainActive) { rCanvas.classList.add("raining"); startRainVisuals(); showToast("🌧️ The sky begins to weep..."); } 
+        else { rCanvas.classList.remove("raining"); showToast("🌤️ The storm has passed."); }
+    }
 
-    document.querySelectorAll('#close-drawer, #close-fav-drawer, .overlay-close').forEach(btn => {
-        btn.addEventListener('click', window.closeAllDrawers);
+    function initClockAndAtmosphere() {
+        const dateEl = document.getElementById("journal-date"); if(dateEl) dateEl.innerText = `Journal Entry: ${new Date().toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}`;
+        const rotatingWordEl = document.getElementById("secret-word"); let wordIndex = moonWords.indexOf(globalState.secretPassword);
+        if(rotatingWordEl) { setInterval(() => { rotatingWordEl.style.opacity = 0; setTimeout(() => { wordIndex = (wordIndex + 1) % moonWords.length; globalState.secretPassword = moonWords[wordIndex]; rotatingWordEl.innerText = globalState.secretPassword; rotatingWordEl.style.opacity = 1; }, 500); }, 4000); }
+        
+        // ✨ 11:11 PM Easter Egg ✨
+        setInterval(() => {
+            const d = new Date();
+            if (d.getHours() === 23 && d.getMinutes() === 11 && !globalState.elevenElevenTriggered) {
+                globalState.elevenElevenTriggered = true;
+                showToast("✨ 11:11... Make a wish, wanderer.");
+            }
+            if (d.getMinutes() !== 11) globalState.elevenElevenTriggered = false; 
+        }, 10000);
+
+        const themeBtn = document.getElementById("theme-toggle");
+        if(themeBtn) { themeBtn.addEventListener("click", () => { const nextTheme = globalState.activeTheme === "dark" ? "light" : "dark"; document.documentElement.setAttribute("data-theme", nextTheme); themeBtn.innerText = nextTheme === "dark" ? "🌙 Night" : "☀️ Day"; globalState.activeTheme = nextTheme; }); }
+        const rainToggleBtn = document.getElementById("rain-toggle"); if(rainToggleBtn) rainToggleBtn.addEventListener("click", toggleRain);
+        const focusBtn = document.getElementById("reading-mode-toggle"); const exitFocusBtn = document.getElementById("exit-focus-btn");
+        function toggleFocus() { document.body.classList.toggle("reading-mode"); focusBtn.innerText = document.body.classList.contains("reading-mode") ? "👁️ Normal" : "📖 Focus"; }
+        if(focusBtn) focusBtn.addEventListener("click", toggleFocus); if(exitFocusBtn) exitFocusBtn.addEventListener("click", toggleFocus);
+    }
+
+    function startRainVisuals() {
+        const rCanvas = document.getElementById("rain-canvas"); if(!rCanvas) return;
+        const rCtx = rCanvas.getContext("2d"); rCanvas.width = window.innerWidth; rCanvas.height = window.innerHeight;
+        const drops = []; for(let i=0; i<100; i++) drops.push({x: Math.random()*rCanvas.width, y: Math.random()*rCanvas.height, l: Math.random()*20+10, v: Math.random()*4+4});
+        function drawRain() {
+            if(!globalState.rainActive) return; rCtx.clearRect(0,0,rCanvas.width,rCanvas.height); rCtx.strokeStyle = "rgba(191,164,111,0.2)"; rCtx.lineWidth = 1; rCtx.beginPath();
+            for(let i=0; i<drops.length; i++) { let d = drops[i]; rCtx.moveTo(d.x, d.y); rCtx.lineTo(d.x+1, d.y+d.l); d.y += d.v; d.x += 0.5; if(d.y > rCanvas.height) { d.y = -20; d.x = Math.random()*rCanvas.width; } }
+            rCtx.stroke(); requestAnimationFrame(drawRain);
+        }
+        drawRain();
+    }
+
+    function initUltimateUniverseBackground() {
+        const canvas = document.getElementById("universe"); if(!canvas) return; const ctx = canvas.getContext("2d", { alpha: false }); 
+        let width = canvas.width = window.innerWidth; let height = canvas.height = window.innerHeight;
+        window.addEventListener("resize", () => { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; });
+
+        const backgroundStars = []; const goldenDust = [];
+        const hour = new Date().getHours(); const isLateNight = hour >= 23 || hour <= 4;
+        const darkThemeBgColor = isLateNight ? "#030308" : "#050507"; 
+        if ((hour >= 23 || hour <= 4) && !globalState.rainActive) { globalState.rainActive = true; document.getElementById("rain-canvas").classList.add("raining"); startRainVisuals(); }
+
+        for(let i = 0; i < 60; i++) backgroundStars.push({ x: Math.random() * width, y: Math.random() * height, radius: Math.random() * 1.2 + 0.3, baseAlpha: Math.random() * 0.5 + 0.2, phase: Math.random() * Math.PI });
+        for(let i = 0; i < 25; i++) goldenDust.push({ x: Math.random() * width, y: Math.random() * height, radius: Math.random() * 1.5 + 0.5, vy: -Math.random() * 0.2 - 0.1, vx: (Math.random() - 0.5) * 0.1, alpha: Math.random() * 0.4 + 0.1 });
+
+        function processRenderLoop() {
+            ctx.fillStyle = globalState.activeTheme === "dark" ? darkThemeBgColor : "#f4ebd0"; ctx.fillRect(0, 0, width, height);
+            for(let star of backgroundStars) {
+                if (globalState.vortexActive) { const dx = (width/2) - star.x; const dy = (height/2) - star.y; star.x += dx * 0.05; star.y += dy * 0.05; if(Math.abs(dx) < 5 && Math.abs(dy) < 5) { star.x = Math.random() * width; star.y = Math.random() * height; }
+                } else { star.phase += 0.02; }
+                let a = star.baseAlpha + Math.sin(star.phase) * 0.2; ctx.beginPath(); ctx.fillStyle = globalState.activeTheme === "dark" ? `rgba(242,238,233,${Math.max(0.1, a)})` : `rgba(28, 22, 12,${Math.max(0.1, a)})`; ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2); ctx.fill();
+            }
+            for(let d of goldenDust) { d.y += d.vy; d.x += d.vx; if(d.y < 0) d.y = height; ctx.beginPath(); ctx.fillStyle = globalState.activeTheme === "dark" ? `rgba(191,164,111,${d.alpha})` : `rgba(74, 44, 17,${d.alpha})`; ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2); ctx.fill(); }
+            requestAnimationFrame(processRenderLoop);
+        }
+        requestAnimationFrame(processRenderLoop);
+    }
+
+    /* --- ✨ INTERACTIVE WAX SEAL (RUB TO BREAK) ✨ --- */
+    function bindWaxSeals(page) {
+        const sealWrap = page.querySelector(".wax-seal-wrapper:not(.broken)");
+        if (!sealWrap) { initTypewriterEngine(); return; }
+        
+        if (sealWrap.dataset.isBroken === "true") {
+            sealWrap.classList.add("broken"); initTypewriterEngine(); return;
+        }
+
+        let rubCount = 0; const threshold = 15; 
+        showToast("👆 Rub the wax seal to break it...");
+
+        const rubHandler = (e) => {
+            rubCount++;
+            sealWrap.style.transform = `scale(${1 + (rubCount * 0.01)}) rotate(${(Math.random() - 0.5) * 10}deg)`;
+            if (rubCount >= threshold) {
+                sealWrap.removeEventListener('mousemove', rubHandler);
+                sealWrap.removeEventListener('touchmove', rubHandler);
+                sealWrap.dataset.isBroken = "true";
+                sealWrap.style.transform = ""; 
+                sealWrap.classList.add("broken");
+                showToast("🔓 The seal is broken.");
+                setTimeout(initTypewriterEngine, 800);
+            }
+        };
+
+        sealWrap.addEventListener('mousemove', rubHandler);
+        sealWrap.addEventListener('touchmove', rubHandler);
+    }
+
+    function initCosmicNavigation() {
+        document.body.addEventListener("click", (e) => {
+            if(e.target.classList.contains("trigger-nav") || e.target.classList.contains("nav-link") || e.target.classList.contains("star-node")) {
+                const targetPageId = e.target.getAttribute("data-target"); executePageFlip(targetPageId);
+            }
+        });
+
+        function executePageFlip(targetPageId) {
+            const currentActivePage = document.querySelector(".page.active"); const destinationPage = document.getElementById(targetPageId);
+            if(!destinationPage || currentActivePage === destinationPage) return;
+
+            globalState.vortexActive = true; document.body.style.overflowY = 'hidden'; 
+            
+            if(targetPageId === "page-fragments") {
+                const currentCombo = notesCombos[globalState.notesVisitCount % 5];
+                document.getElementById("combo-quote-1").innerText = currentCombo[0]; document.getElementById("combo-quote-2").innerText = currentCombo[1]; document.getElementById("combo-quote-3").innerText = currentCombo[2];
+                globalState.notesVisitCount++; checkUltimateVault();
+            }
+            
+            if(currentActivePage) {
+                const sign = currentActivePage.querySelector('.sign-animate'); if (sign) sign.classList.remove('active-sign');
+                currentActivePage.classList.remove("active"); currentActivePage.classList.add("vortex-out");
+                
+                setTimeout(() => {
+                    currentActivePage.classList.remove("vortex-out"); destinationPage.classList.add("vortex-in"); destinationPage.classList.add("active");
+                    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+                    
+                    setTimeout(() => {
+                        destinationPage.classList.remove("vortex-in"); globalState.vortexActive = false; document.body.style.overflowY = 'auto'; 
+                        
+                        bindWaxSeals(destinationPage);
+                    }, 50); 
+                }, 600); 
+            } else { destinationPage.classList.add("active"); initTypewriterEngine(); }
+            document.querySelectorAll(".nav-link").forEach(lnk => { lnk.classList.toggle("active-nav", lnk.getAttribute("data-target") === targetPageId); });
+        }
+    }
+
+    function applyWhispers(el, poemIndex) {
+        const pData = POEM_DATABASE[poemIndex];
+        if(!pData || !pData.whispers || el.dataset.whispersApplied === "true") return;
+        let html = el.innerHTML;
+        pData.whispers.forEach(w => { const regex = new RegExp(`\\b${w.word}\\b`, 'gi'); html = html.replace(regex, `<span class="whisper-word" data-original="${w.word}" data-hidden="${w.hidden}">${w.word}</span>`); });
+        el.innerHTML = html; el.dataset.whispersApplied = "true";
+
+        el.querySelectorAll('.whisper-word').forEach(span => {
+            span.addEventListener('click', function() {
+                let curr = this.innerText; this.style.opacity = 0;
+                setTimeout(() => { this.innerText = (curr.toLowerCase() === this.dataset.original.toLowerCase()) ? this.dataset.hidden : this.dataset.original; this.style.opacity = 1; this.classList.toggle('whispered'); }, 300);
+            });
+        });
+    }
+
+    function initTypewriterEngine() {
+        const activePage = document.querySelector(".page.active"); if (!activePage) return;
+        const poemIndex = activePage.getAttribute("data-poem-index");
+        const poemEls = activePage.querySelectorAll(".typewriter-poem");
+        
+        poemEls.forEach((el, index) => {
+            const text = el.getAttribute("data-lines"); if (!text) return;
+            const lines = text.replace(/\\n/g, '\n').split('\n');
+            const signEl = activePage.querySelector(".sign-animate");
+            const poemId = activePage.id + "-" + index;
+
+            if (!window.twMasterState[poemId]) { window.twMasterState[poemId] = { lineIndex: 0, charIndex: 0, outHtml: "", status: "unstarted" }; el.innerHTML = ""; }
+            let state = window.twMasterState[poemId];
+            
+            if (state.status === "finished" || el.getAttribute("data-animated") === "true") { 
+                if(signEl) { signEl.style.width = "100%"; signEl.style.borderColor = "transparent"; signEl.classList.add("show-instantly"); }
+                if(poemIndex !== null) applyWhispers(el, poemIndex); return; 
+            }
+            if (state.status === "typing") return; 
+
+            state.status = "typing"; el.classList.add("is-typing");
+
+            function typeNext() {
+                if (!activePage.classList.contains("active")) { state.status = "paused"; el.classList.remove("is-typing"); return; }
+                if (state.lineIndex < lines.length) {
+                    let currentLine = lines[state.lineIndex];
+                    if (currentLine === "") { state.outHtml += "<br><br>"; el.innerHTML = state.outHtml; state.lineIndex++; state.charIndex = 0; setTimeout(typeNext, 200); return; }
+                    if (state.charIndex === 0 && state.lineIndex === 0) {
+                        let char = currentLine.charAt(0); state.outHtml += `<span class="drop-cap-antique">${char}</span>`; el.innerHTML = state.outHtml; state.charIndex++; setTimeout(typeNext, 40);
+                    } else if (state.charIndex < currentLine.length) {
+                        let isFirstChar = (state.charIndex === 0 && state.lineIndex === 0);
+                        el.innerHTML = state.outHtml + currentLine.substring(isFirstChar ? 1 : 0, state.charIndex + 1); state.charIndex++; setTimeout(typeNext, 35); 
+                    } else { state.outHtml = el.innerHTML + "<br>"; el.innerHTML = state.outHtml; state.lineIndex++; state.charIndex = 0; setTimeout(typeNext, 400); }
+                } else { 
+                    state.status = "finished"; el.setAttribute("data-animated", "true"); el.classList.remove("is-typing"); 
+                    if(signEl) { signEl.style.width = "100%"; signEl.style.borderColor = "transparent"; signEl.classList.add("show-instantly"); }
+                    if(poemIndex !== null) applyWhispers(el, poemIndex);
+                }
+            }
+            setTimeout(typeNext, 200);
+        });
+    }
+
+    function tryStartupAudio() {
+        if(!globalState.audioContext) globalState.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        if(globalState.isAudioPlaying) return; globalState.isAudioPlaying = true;
+        
+        let osc = globalState.audioContext.createOscillator(); let gain = globalState.audioContext.createGain();
+        osc.type = 'sine'; osc.frequency.value = 261.63; // C4
+        gain.gain.setValueAtTime(0, globalState.audioContext.currentTime); gain.gain.linearRampToValueAtTime(0.015, globalState.audioContext.currentTime + 3); 
+        osc.connect(gain); gain.connect(globalState.audioContext.destination); osc.start();
+
+        if (globalState.rainActive) {
+            let bufferSize = globalState.audioContext.sampleRate * 2; 
+            let buffer = globalState.audioContext.createBuffer(1, bufferSize, globalState.audioContext.sampleRate);
+            let data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1; 
+            let noise = globalState.audioContext.createBufferSource(); noise.buffer = buffer; noise.loop = true;
+            let filter = globalState.audioContext.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 1000;
+            let rainGain = globalState.audioContext.createGain(); rainGain.gain.value = 0.02;
+            noise.connect(filter); filter.connect(rainGain); rainGain.connect(globalState.audioContext.destination); noise.start();
+        }
+    }
+
+    document.body.addEventListener('click', function(e) {
+        if(e.target && e.target.classList.contains('download-poem-btn')) {
+            const pIdx = e.target.getAttribute('data-poem-index'); if(pIdx === null) return;
+            const poem = POEM_DATABASE[pIdx]; const canvas = document.createElement("canvas"); const ctx = canvas.getContext("2d");
+            canvas.width = 1080; canvas.height = 1920;
+            ctx.fillStyle = globalState.activeTheme === "dark" ? "#0b0b0f" : "#e8dcc7"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = "#bfa46f"; ctx.lineWidth = 4; ctx.strokeRect(50, 50, canvas.width - 100, canvas.height - 100);
+            ctx.fillStyle = "#bfa46f"; ctx.textAlign = "center"; ctx.font = "bold 60px Cinzel, serif"; ctx.fillText("THE MIDNIGHT LIBRARY", canvas.width / 2, 180);
+            ctx.font = "30px Urbanist, sans-serif"; ctx.fillText("✦  ✦  ✦", canvas.width / 2, 240);
+            ctx.font = "bold 80px Cinzel, serif"; ctx.fillText(poem.title.replace('<br>', ' '), canvas.width / 2, 400);
+            ctx.font = "35px Cinzel, serif"; ctx.fillStyle = globalState.activeTheme === "dark" ? "rgba(242,238,233,0.6)" : "rgba(59,34,16,0.6)"; ctx.fillText(poem.subtitle, canvas.width / 2, 460);
+            ctx.fillStyle = globalState.activeTheme === "dark" ? "#f2eee9" : "#3B2210"; ctx.font = "40px Playfair Display, serif";
+            let y = 600; const lines = poem.text.split('\n');
+            lines.forEach(line => { if(line === "") y += 40; else { ctx.fillText(line.trim(), canvas.width / 2, y); y += 60; } });
+            ctx.fillStyle = "#bfa46f"; ctx.font = "italic 60px Great Vibes, cursive"; ctx.fillText("— Soham Madan Jadhao", canvas.width / 2, canvas.height - 200);
+            const link = document.createElement("a"); link.download = `${poem.title.replace('<br>','')}-Story.png`; link.href = canvas.toDataURL("image/png"); link.click();
+            showToast("📸 High-Res Insta Story Downloaded!");
+        }
     });
 
-    // ---- 8. UTILITIES: TOASTS, RIPPLES & PROGRESS BAR ----
-    window.showToast = function(msg) {
-        const container = document.getElementById('toast-container');
-        if (!container) return;
-        const t = document.createElement('div');
-        t.className = 'toast';
-        t.innerText = msg;
-        container.appendChild(t);
-        setTimeout(() => t.remove(), 3400);
-    };
+    function initBookmarksDrawer() {
+        const drawer = document.getElementById("bookmarks-drawer"); const openBtn = document.getElementById("open-bookmarks-btn");
+        const closeBtn = document.getElementById("close-drawer"); const list = document.getElementById("bookmarks-list");
+        if(!drawer || !openBtn || !closeBtn || !list) return;
+        function renderBookmarks() {
+            let bookmarks = JSON.parse(localStorage.getItem('midnightBookmarks') || '[]'); list.innerHTML = "";
+            if (bookmarks.length === 0) { list.innerHTML = `<p style="opacity: 0.5; font-style: italic;">Your soul hasn't saved any verses yet...</p>`; } 
+            else { bookmarks.forEach(bm => { list.innerHTML += `<div class="bookmark-item">📖 ${bm}</div>`; }); }
+        }
+        openBtn.addEventListener("click", () => { renderBookmarks(); drawer.classList.add("open"); }); closeBtn.addEventListener("click", () => { drawer.classList.remove("open"); });
+    }
 
-    window.addEventListener('scroll', () => {
-        const bar = document.getElementById('reading-progress');
-        if (!bar) return;
-        const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        bar.style.width = height > 0 ? `${(winScroll / height) * 100}%` : "0%";
-    }, { passive: true });
+    function initLibraryFeatures() {
+        const footerQuote = document.getElementById("quote-rotator"); if(footerQuote) footerQuote.innerText = quoteDatabase[Math.floor(Math.random() * quoteDatabase.length)];
+        const moonTrigger = document.getElementById("moon-phase");
+        if(moonTrigger) {
+            moonTrigger.addEventListener("click", () => {
+                globalState.secretClicks++; checkUltimateVault();
+                if(globalState.secretClicks === 3) { 
+                    globalState.hasTappedMoon = true; checkUltimateVault();
+                    showToast("🏆 Achievement Unlocked: Moonwalker");
+                    document.querySelector(".trigger-nav[data-target='page-secret']")?.click() || document.getElementById('page-secret').classList.add('active'); globalState.secretClicks = 0;
+                }
+            });
+        }
+        document.body.addEventListener('click', function(e) {
+            if(e.target && e.target.classList.contains('bookmark-btn')) {
+                const poemId = e.target.getAttribute('data-poem'); let bookmarks = JSON.parse(localStorage.getItem('midnightBookmarks') || '[]');
+                if (!bookmarks.includes(poemId)) { bookmarks.push(poemId); localStorage.setItem('midnightBookmarks', JSON.stringify(bookmarks)); showToast("🔖 Verse saved to your soul."); } else { showToast("✨ Verse already remembered."); }
+                e.target.innerText = "❤️ Saved";
+            }
+        });
+    }
 
-    window.addEventListener('click', (e) => {
-        const ripple = document.createElement('div');
-        ripple.className = 'touch-ripple';
-        ripple.style.left = `${e.clientX}px`;
-        ripple.style.top = `${e.clientY}px`;
-        document.body.appendChild(ripple);
-        ripple.addEventListener('animationend', () => ripple.remove());
-    }, { passive: true });
-
+    function showToast(msg) {
+        const container = document.getElementById("toast-container"); const toast = document.createElement("div"); toast.className = "toast"; toast.innerText = msg; container.appendChild(toast); setTimeout(() => toast.remove(), 3500);
+    }
 });
